@@ -1,3 +1,4 @@
+// Validando a seção dos Admins na aplicação
 import jwt from 'jsonwebtoken';
 import * as Yup from 'yup';
 import User from '../models/User';

@@ -1,3 +1,4 @@
+// Importando img na aplicação
 import File from '../models/File';
 
 class FileController {

@@ -1,3 +1,4 @@
+// Cadastro entregadores dos produtos
 import * as Yup from 'yup';
 import Deliveryman from '../models/Deliveryman';
 import File from '../models/File';
@@ -80,15 +81,15 @@ class DeliverymanController {
   }
 
   async index(req, res) {
-    const deliveryman = await Deliveryman.findAll({
-      order: ['name'],
+    const deliveryman = await Deliveryman.findAndCountAll({
+      order: ['id'],
     });
 
-    if (!deliveryman) {
+    if (deliveryman.count < 1) {
       return res.status(401).json({ ERRO: 'Não há Deliveryman cadastrados' });
     }
 
-    return res.json(deliveryman);
+    return res.json(deliveryman.rows);
   }
 
   async delete(req, res) {

@@ -1,3 +1,4 @@
+// Cadastro Receptores/Clientes dos produtos
 import * as Yup from 'yup';
 import Recipient from '../models/Recipient';
 
