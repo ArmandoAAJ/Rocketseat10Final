@@ -14,6 +14,14 @@ import DeliverymanController from './app/controllers/DeliverymanController';
 
 import OrderController from './app/controllers/OrderController';
 
+import ListOrderController from './app/controllers/ListOrder';
+
+import OrderStartController from './app/controllers/OrderStartController';
+
+import OrderEndController from './app/controllers/OrderEndController';
+
+import OrderProblemController from './app/controllers/OrderProblemController';
+
 const routes = new Router();
 const upload = multer(multerConfig);
 
@@ -44,5 +52,18 @@ routes.post('/orders', authMiddleware, OrderController.store);
 routes.put('/orders/:id', authMiddleware, OrderController.update);
 routes.get('/orders', authMiddleware, OrderController.index);
 routes.delete('/orders/:id', authMiddleware, OrderController.delete);
+
+// List Orders Deliverman
+routes.get('/orders/:id/list', ListOrderController.index);
+routes.get('/orders/:id/delivered', ListOrderController.show);
+
+// Order Start Deliveryman
+routes.put('/orders/:id/start', OrderStartController.update);
+
+// Order End Deliveryman
+routes.put('/orders/:id/end', OrderEndController.update);
+
+// delivery error
+routes.post('/orders/:id/problems', OrderProblemController.store);
 
 export default routes;

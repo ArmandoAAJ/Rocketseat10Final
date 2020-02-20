@@ -72,15 +72,15 @@ class OrderController {
   }
 
   async index(req, res) {
-    const order = await Order.findAndCountAll({
+    const order = await Order.findAll({
       order: ['id'],
     });
 
-    if (order.count < 1) {
+    if (order < 1) {
       return res.status(401).json({ ERRO: 'Não há Deliveryman cadastrados' });
     }
 
-    return res.json(order.rows);
+    return res.json(order);
   }
 
   async delete(req, res) {
