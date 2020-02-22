@@ -33,6 +33,8 @@ routes.post('/sessions', SessionController.store);
 // Recipient
 routes.post('/recipients', authMiddleware, RecipientController.store);
 routes.put('/recipients/:id', authMiddleware, RecipientController.update);
+// busca por nome do Destinatário
+routes.get('/recipients/search', authMiddleware, RecipientController.show);
 
 // File avatar_id Deliveryman
 routes.post('/files', upload.single('file'), FileController.store);
@@ -46,12 +48,16 @@ routes.delete(
   authMiddleware,
   DeliverymanController.delete
 );
+// busca por nome do entregador
+routes.get('/deliverymans/search', authMiddleware, DeliverymanController.show);
 
 // Order
 routes.post('/orders', authMiddleware, OrderController.store);
 routes.put('/orders/:id', authMiddleware, OrderController.update);
 routes.get('/orders', authMiddleware, OrderController.index);
 routes.delete('/orders/:id', authMiddleware, OrderController.delete);
+// busca por nome do produto
+routes.get('/orders/search', authMiddleware, OrderController.show);
 
 // List Orders Deliverman
 routes.get('/orders/:id/list', ListOrderController.index);
@@ -64,6 +70,17 @@ routes.put('/orders/:id/start', OrderStartController.update);
 routes.put('/orders/:id/end', OrderEndController.update);
 
 // delivery error
-routes.post('/orders/:id/problems', OrderProblemController.store);
+routes.post('/orders/problems', OrderProblemController.store);
+routes.get(
+  '/orders/problems/:id',
+  authMiddleware,
+  OrderProblemController.index
+);
+routes.get('/orders/problems', authMiddleware, OrderProblemController.show);
+routes.delete(
+  '/orders/problems/:id',
+  authMiddleware,
+  OrderProblemController.delete
+);
 
 export default routes;

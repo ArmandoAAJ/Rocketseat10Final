@@ -1,5 +1,6 @@
 // Cadastro Receptores/Clientes dos produtos
 import * as Yup from 'yup';
+import { Op } from 'sequelize';
 import Recipient from '../models/Recipient';
 
 class SessionController {
@@ -47,6 +48,29 @@ class SessionController {
     }
 
     await recipient.update(req.body);
+
+    return res.json(recipient);
+  }
+
+  async show(req, res) {
+    const { q, page = 1 } = req.query;
+
+    const recipient = q
+      ? await Recipient.findAll({
+          where: { name: { [Op.iLike]: `%${q}%` } },
+          order: ['name'],
+          limit: 10,
+          offset: (page - 1) * 10,
+        })
+      : await Recipient.findAll({
+          order: ['name'],
+          limit: 10,
+          offset: (page - 1) * 10,
+        });
+
+    if (recipient.length <= 0) {
+      return res.json({ error: 'Não encontramos nada com sua busca!' });
+    }
 
     return res.json(recipient);
   }

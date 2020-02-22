@@ -1,5 +1,6 @@
 // Cadastro entregadores dos produtos
 import * as Yup from 'yup';
+import { Op } from 'sequelize';
 import Deliveryman from '../models/Deliveryman';
 import File from '../models/File';
 
@@ -90,6 +91,29 @@ class DeliverymanController {
     }
 
     return res.json(deliveryman.rows);
+  }
+
+  async show(req, res) {
+    const { q, page = 1 } = req.query;
+
+    const deliveryman = q
+      ? await Deliveryman.findAll({
+          where: { name: { [Op.iLike]: `%${q}%` } },
+          order: ['name'],
+          limit: 10,
+          offset: (page - 1) * 10,
+        })
+      : await Deliveryman.findAll({
+          order: ['name'],
+          limit: 10,
+          offset: (page - 1) * 10,
+        });
+
+    if (deliveryman.length <= 0) {
+      return res.json({ error: 'Não encontramos nada com sua busca!' });
+    }
+
+    return res.json(deliveryman);
   }
 
   async delete(req, res) {

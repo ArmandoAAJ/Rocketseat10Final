@@ -1,5 +1,6 @@
 // Cadastro dados da entrega/cliente/entregador/produto
 import * as Yup from 'yup';
+import { Op } from 'sequelize';
 import Order from '../models/Order';
 import Deliveryman from '../models/Deliveryman';
 import Recipient from '../models/Recipient';
@@ -81,6 +82,29 @@ class OrderController {
     }
 
     return res.json(order);
+  }
+
+  async show(req, res) {
+    const { q, page = 1 } = req.query;
+
+    const orders = q
+      ? await Order.findAll({
+          where: { product: { [Op.iLike]: `%${q}%` } },
+          order: ['product'],
+          limit: 10,
+          offset: (page - 1) * 10,
+        })
+      : await Order.findAll({
+          order: ['product'],
+          limit: 10,
+          offset: (page - 1) * 10,
+        });
+
+    if (orders.length <= 0) {
+      return res.json({ error: 'Não encontramos nada com sua busca!' });
+    }
+
+    return res.json(orders);
   }
 
   async delete(req, res) {

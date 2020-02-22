@@ -1,4 +1,4 @@
-// Listagem de pedidos de entrgas
+// Listagem de pedidos de entregas
 import { Op } from 'sequelize';
 import Order from '../models/Order';
 import Deliveryman from '../models/Deliveryman';
@@ -15,16 +15,16 @@ class ListOrder {
       });
     }
 
-    const order = await Order.findAndCountAll({
+    const order = await Order.findAll({
       where: { deliveryman_id: id, canceled_at: null, end_date: null },
       order: ['id'],
     });
 
-    if (order.count < 1) {
+    if (order.length < 1) {
       return res.status(401).json({ ERRO: 'Não há entregas disponíveis' });
     }
 
-    return res.json(order.rows);
+    return res.json(order);
   }
 
   async show(req, res) {
