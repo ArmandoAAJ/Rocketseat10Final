@@ -1,10 +1,13 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable react/button-has-type */
 import React, { useEffect, useState } from 'react';
+import { Form, Input } from '@rocketseat/unform';
 import { Link, useLocation } from 'react-router-dom';
+
 import { MdAdd, MdFiberManualRecord } from 'react-icons/md';
 import queryString from 'query-string';
 import Avatar from 'react-avatar';
+import history from '~/services/history';
 import { Container, Content, ContentTable } from './styles';
 import Header from '~/components/Header';
 
@@ -26,7 +29,12 @@ export default function Dashboard() {
     }
 
     loadData();
-  }, []);
+  }, [q]);
+
+  function handleSubmit(data) {
+    history.push(`dashboard?q=${data.q}`);
+  }
+
   return (
     <Container>
       <Header />
@@ -35,9 +43,9 @@ export default function Dashboard() {
           <h2>Gerenciando Encomendas</h2>
         </nav>
         <div>
-          <form>
-            <input name="q" placeholder="Buscar Encomendas" />
-          </form>
+          <Form onSubmit={handleSubmit}>
+            <Input name="q" placeholder="Buscar Encomendas" />
+          </Form>
           <Link to="/novaencomenda">
             <button>
               <MdAdd size={19} />
