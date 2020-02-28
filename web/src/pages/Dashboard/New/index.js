@@ -19,13 +19,18 @@ export default function New() {
       const responseDeliveryman = await api.get('deliverymans');
       const responseRecipients = await api.get('recipients');
 
-      const data = responseDeliveryman.data.map(d => ({
+      const dataDeliveryman = responseDeliveryman.data.map(d => ({
         value: d.id,
         label: d.name,
       }));
 
-      setRecipients(responseRecipients.data);
-      setDeliverymans(data);
+      const dataRecipient = responseRecipients.data.map(r => ({
+        value: r.id,
+        label: r.name,
+      }));
+
+      setRecipients(dataRecipient);
+      setDeliverymans(dataDeliveryman);
     }
     loadSelect();
   }, []);
@@ -55,11 +60,19 @@ export default function New() {
           <div className="select">
             <label>
               Destinatário
-              <Select name="" options={deliverymans} placeholder="Plano" />
+              <Select
+                name=""
+                options={recipients}
+                placeholder="Selecione o Destinatário"
+              />
             </label>
             <label>
               Entregador
-              <Select />
+              <Select
+                name=""
+                options={deliverymans}
+                placeholder="Selecione o Entregador"
+              />
             </label>
           </div>
           <label> Nome do Produto</label>
