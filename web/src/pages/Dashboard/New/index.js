@@ -4,15 +4,19 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Select from 'react-select';
-// import { Input } from '@rocketseat/unform';
+import { Form, Input } from '@rocketseat/unform';
 import { MdDone, MdChevronLeft } from 'react-icons/md';
+import { toast } from 'react-toastify';
 import { Container, Content, StudentsContent } from './styles';
 import Header from '~/components/Header';
 import api from '~/services/api';
+import history from '~/services/history';
 
 export default function New() {
   const [deliverymans, setDeliverymans] = useState();
-  const [recipients, setRecipients] = useState([]);
+  const [recipients, setRecipients] = useState();
+  const [opRecipients, setOpRecipients] = useState({});
+  const [opDeliverymans, setOpDeliverymans] = useState({});
 
   useEffect(() => {
     async function loadSelect() {
@@ -35,50 +39,74 @@ export default function New() {
     loadSelect();
   }, []);
 
+  async function handleSubmit({ product }) {
+    const recipient_id = opRecipients.value;
+    const deliveryman_id = opDeliverymans.value;
+    try {
+      const response = await api.post('orders', {
+        recipient_id,
+        deliveryman_id,
+        product,
+      });
+      if (response) {
+        toast.success('Registro salvo!');
+        history.push('/dashboard');
+      }
+    } catch (err) {
+      toast.error(err.response.data.ERRO);
+    }
+  }
+
   return (
     <Container>
       <Header />
-      <Content>
-        <nav>
-          <h2>Cadastro de Encomendas</h2>
-          <div>
-            <Link to="/dashboard">
-              <button>
-                <MdChevronLeft size={19} />
-                &nbsp;Voltar
-              </button>
-            </Link>
-            <Link to="/novaencomenda">
-              <button className="last">
+      <Form onSubmit={handleSubmit}>
+        <Content>
+          <nav>
+            <h2>Cadastro de Encomendas</h2>
+            <div>
+              <Link to="/dashboard">
+                <button>
+                  <MdChevronLeft size={19} />
+                  &nbsp;Voltar
+                </button>
+              </Link>
+              <button type="submit" className="last">
                 <MdDone size={19} />
                 &nbsp;Salvar
               </button>
-            </Link>
-          </div>
-        </nav>
-        <StudentsContent>
-          <div className="select">
-            <label>
-              Destinatário
-              <Select
-                name=""
-                options={recipients}
-                placeholder="Selecione o Destinatário"
-              />
-            </label>
-            <label>
-              Entregador
-              <Select
-                name=""
-                options={deliverymans}
-                placeholder="Selecione o Entregador"
-              />
-            </label>
-          </div>
-          <label> Nome do Produto</label>
-          <input placeholder="Digite o nome do produto" />
-        </StudentsContent>
-      </Content>
+            </div>
+          </nav>
+          <StudentsContent>
+            <div className="select">
+              <label>
+                Destinatário
+                <Select
+                  name=""
+                  onChange={e => setOpRecipients(e)}
+                  options={recipients}
+                  placeholder="Selecione o Destinatário"
+                />
+              </label>
+              <label>
+                Entregador
+                <Select
+                  name=""
+                  onChange={e => setOpDeliverymans(e)}
+                  options={deliverymans}
+                  placeholder="Selecione o Entregador"
+                />
+              </label>
+            </div>
+            <label> Nome do Produto</label>
+            <Input
+              name="product"
+              placeholder="Digite o nome do produto"
+              required
+            />
+          </StudentsContent>
+        </Content>
+      </Form>
     </Container>
   );
 }
