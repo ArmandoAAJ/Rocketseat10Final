@@ -113,7 +113,7 @@ class OrderController {
         });
 
     if (orders.length < 1) {
-      return res.json({ error: 'Não encontramos nada com sua busca!' });
+      return res.json({ ERROR: 'Não encontramos nada com sua busca!' });
     }
 
     return res.json(orders);
