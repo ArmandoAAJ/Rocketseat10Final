@@ -52,19 +52,17 @@ class SessionController {
     return res.json(recipient);
   }
 
-  async show(req, res) {
+  async index(req, res) {
     const { q, page = 1 } = req.query;
 
     const recipient = q
       ? await Recipient.findAll({
           where: { name: { [Op.iLike]: `%${q}%` } },
           order: ['name'],
-          limit: 10,
           offset: (page - 1) * 10,
         })
       : await Recipient.findAll({
           order: ['name'],
-          limit: 10,
           offset: (page - 1) * 10,
         });
 

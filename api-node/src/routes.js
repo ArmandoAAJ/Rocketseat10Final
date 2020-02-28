@@ -34,7 +34,7 @@ routes.post('/sessions', SessionController.store);
 routes.post('/recipients', authMiddleware, RecipientController.store);
 routes.put('/recipients/:id', authMiddleware, RecipientController.update);
 // busca por nome do Destinatário
-routes.get('/recipients/search', authMiddleware, RecipientController.show);
+routes.get('/recipients', authMiddleware, RecipientController.index);
 
 // File avatar_id Deliveryman
 routes.post('/files', upload.single('file'), FileController.store);
