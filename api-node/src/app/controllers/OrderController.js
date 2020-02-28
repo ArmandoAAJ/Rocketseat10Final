@@ -73,34 +73,46 @@ class OrderController {
   }
 
   async index(req, res) {
-    const order = await Order.findAll({
-      order: ['id'],
-    });
-
-    if (order < 1) {
-      return res.status(401).json({ ERRO: 'Não há Deliveryman cadastrados' });
-    }
-
-    return res.json(order);
-  }
-
-  async show(req, res) {
     const { q, page = 1 } = req.query;
 
     const orders = q
       ? await Order.findAll({
           where: { product: { [Op.iLike]: `%${q}%` } },
           order: ['product'],
+          include: [
+            {
+              model: Deliveryman,
+              as: 'deliveryman',
+              attributes: ['id', 'name', 'email'],
+            },
+            {
+              model: Recipient,
+              as: 'recipient',
+              attributes: ['id', 'name', 'cidade', 'estado'],
+            },
+          ],
           limit: 10,
           offset: (page - 1) * 10,
         })
       : await Order.findAll({
           order: ['product'],
+          include: [
+            {
+              model: Deliveryman,
+              as: 'deliveryman',
+              attributes: ['id', 'name', 'email'],
+            },
+            {
+              model: Recipient,
+              as: 'recipient',
+              attributes: ['id', 'name', 'cidade', 'estado'],
+            },
+          ],
           limit: 10,
           offset: (page - 1) * 10,
         });
 
-    if (orders.length <= 0) {
+    if (orders.length < 1) {
       return res.json({ error: 'Não encontramos nada com sua busca!' });
     }
 

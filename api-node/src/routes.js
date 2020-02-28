@@ -56,8 +56,6 @@ routes.post('/orders', authMiddleware, OrderController.store);
 routes.put('/orders/:id', authMiddleware, OrderController.update);
 routes.get('/orders', authMiddleware, OrderController.index);
 routes.delete('/orders/:id', authMiddleware, OrderController.delete);
-// busca por nome do produto
-routes.get('/orders/search', authMiddleware, OrderController.show);
 
 // List Orders Deliverman
 routes.get('/orders/:id/list', ListOrderController.index);
