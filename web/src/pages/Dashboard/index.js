@@ -1,8 +1,9 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable react/button-has-type */
 import React, { useEffect, useState } from 'react';
 import { Form, Input } from '@rocketseat/unform';
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 import { MdAdd, MdFiberManualRecord } from 'react-icons/md';
 import queryString from 'query-string';
@@ -10,14 +11,13 @@ import Avatar from 'react-avatar';
 import history from '~/services/history';
 import { Container, Content, ContentTable } from './styles';
 import Header from '~/components/Header';
-
+import Notification from '~/components/Notificatios';
 import api from '~/services/api';
 
-export default function Dashboard() {
+export default function Dashboard({ location }) {
   const [orders, setOrders] = useState([]);
-  const urlString = useLocation();
 
-  const { q } = queryString.parse(urlString.search);
+  const { q } = queryString.parse(location.search);
 
   useEffect(() => {
     async function loadData() {
@@ -47,7 +47,7 @@ export default function Dashboard() {
             <Input name="q" placeholder="Buscar Encomendas" />
           </Form>
           <Link to="/novaencomenda">
-            <button>
+            <button className="cadastrar">
               <MdAdd size={19} />
               &nbsp;Cadastrar
             </button>
@@ -61,6 +61,7 @@ export default function Dashboard() {
                   <th>ID</th>
                   <th>Destinatário</th>
                   <th>Entregador</th>
+                  <th>Produto</th>
                   <th>Cidade</th>
                   <th>Estado</th>
                   <th>Status</th>
@@ -82,6 +83,7 @@ export default function Dashboard() {
                       &nbsp;&nbsp;
                       {order.deliveryman.name}
                     </td>
+                    <td>{order.product}</td>
                     <td>{order.recipient.cidade}</td>
                     <td>{order.recipient.estado}</td>
                     <td>
@@ -107,7 +109,9 @@ export default function Dashboard() {
                         </li>
                       )}
                     </td>
-                    <td>...</td>
+                    <td>
+                      <Notification />
+                    </td>
                   </tr>
                 ))}
               </tbody>
