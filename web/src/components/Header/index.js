@@ -2,7 +2,6 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { loginOut } from '~/store/modules/autenticacao/action';
-
 import { Container, Content, Profile } from './styles';
 import headerLogo from '~/assets/logo.png';
 

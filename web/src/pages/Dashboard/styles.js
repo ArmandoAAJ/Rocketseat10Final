@@ -16,7 +16,7 @@ export const Content = styled.div`
     justify-content: space-between;
   }
 
-  button {
+  .cadastrar {
     height: 30px;
     padding: 0 15px;
     border-radius: 4px;
@@ -63,10 +63,6 @@ export const ContentTable = styled.div`
       div {
         margin: 0;
       }
-    }
-
-    td:last-child {
-      text-align: right;
     }
 
     .entregue {
