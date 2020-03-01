@@ -3,6 +3,27 @@ import styled from 'styled-components';
 export const Container = styled.div`
   height: 100%;
   background: #eee;
+
+  .modal {
+    padding: 15px;
+
+    h4 {
+      padding-bottom: 8px;
+    }
+
+    p {
+      padding-bottom: 8px;
+    }
+
+    p + h4 {
+      padding-top: 8px;
+      border-top: 1px solid #eee;
+    }
+    img {
+      padding: 5px;
+      width: 350px;
+    }
+  }
 `;
 
 export const Content = styled.div`
@@ -59,10 +80,19 @@ export const ContentTable = styled.div`
         display: flex;
         justify-content: center;
       }
+      .icons {
+        border: none;
+        margin-left: 2px;
+        background-color: #fff;
+      }
 
       div {
         margin: 0;
       }
+    }
+
+    td:last-child {
+      text-align: right;
     }
 
     .entregue {
