@@ -51,7 +51,6 @@ export default function New({ location, match }) {
   async function handleSubmit({ product }) {
     const recipient_id = opRecipients.value;
     const deliveryman_id = opDeliverymans.value;
-    console.tron.log(product);
     try {
       const response = await api.put(`orders/${id}`, {
         recipient_id,

@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable react/prop-types */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable react/button-has-type */
@@ -16,6 +17,8 @@ import {
 import queryString from 'query-string';
 import { format, isAfter } from 'date-fns';
 import Avatar from 'react-avatar';
+import { toast } from 'react-toastify';
+import { confirmAlert } from 'react-confirm-alert';
 import history from '~/services/history';
 import { Container, Content, ContentTable } from './styles';
 import Header from '~/components/Header';
@@ -36,19 +39,21 @@ export default function Dashboard({ location }) {
         params: { q },
       });
 
-      const data = response.data.map(o => ({
-        ...o,
-        start: format(new Date(o.start_date), 'dd/MM/yyyy'),
-        end: format(new Date(o.end_date), 'dd/MM/yyyy'),
-        status: isAfter(new Date(), new Date(o.start_date)),
-      }));
-
-      console.tron.log(data);
-      setOrders(data);
+      try {
+        const data = response.data.map(o => ({
+          ...o,
+          start: format(new Date(o.start_date), 'dd/MM/yyyy'),
+          end: format(new Date(o.end_date), 'dd/MM/yyyy'),
+          status: isAfter(new Date(), new Date(o.start_date)),
+        }));
+        setOrders(data);
+      } catch (err) {
+        setOrders(response.data);
+      }
     }
 
     loadData();
-  }, [q]);
+  }, [q, orders]);
 
   function handleSubmit(data) {
     history.push(`dashboard?q=${data.q}`);
@@ -63,6 +68,32 @@ export default function Dashboard({ location }) {
 
   function closeModal() {
     setVisible(false);
+  }
+
+  async function handleStudentDelete(id) {
+    try {
+      await api.delete(`orders/${id}`);
+      toast.success('Encomenda deletada com sucesso');
+    } catch (err) {
+      toast.error('Encomenda não encontrado!');
+    }
+  }
+
+  function confirmOrderDelete(id) {
+    confirmAlert({
+      title: 'Deletar Encomenda',
+      message: 'Você está certo disso? Não poderá desfazer está ação!',
+      buttons: [
+        {
+          label: 'Sim',
+          onClick: () => handleStudentDelete(id),
+        },
+        {
+          label: 'Não',
+          onClick: () => {},
+        },
+      ],
+    });
   }
 
   return (
@@ -191,14 +222,8 @@ export default function Dashboard({ location }) {
                           <MdModeEdit color="#1E90FF" />
                         </button>
                       </Link>
-                      <Link
-                        to={{
-                          pathname: `/orders/${order.id}`,
-                          state: {
-                            order,
-                          },
-                        }}
-                      >
+
+                      <Link onClick={() => confirmOrderDelete(order.id)}>
                         <button className="icons">
                           <MdDelete color="#B22222" />
                         </button>
@@ -209,7 +234,7 @@ export default function Dashboard({ location }) {
               </tbody>
             </table>
           ) : (
-            <h3>Não há dados para a busca selecionada</h3>
+            <h3>:(</h3>
           )}
         </ContentTable>
       </Content>
