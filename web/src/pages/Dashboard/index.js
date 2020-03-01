@@ -36,7 +36,14 @@ export default function Dashboard({ location }) {
         params: { q },
       });
 
-      setOrders(response.data);
+      const data = response.data.map(o => ({
+        ...o,
+        start: format(new Date(o.start_date), 'dd/MM/yyyy'),
+        end: format(new Date(o.end_date), 'dd/MM/yyyy'),
+      }));
+
+      console.tron.log(data);
+      setOrders(data);
     }
 
     loadData();
@@ -47,15 +54,8 @@ export default function Dashboard({ location }) {
   }
 
   function openModal(order) {
-    // função para chamar o modal, passei no onclick o order com todos os dados
-    // filtrei as datas e formatei depois setei o estado
-    // Melhorar isso que não deve estar certo kkkk
-    const { start_date } = order;
-    const start = format(new Date(start_date), 'dd/MM/yyyy');
-    const { end_date } = order;
-    const end = format(new Date(end_date), 'dd/MM/yyyy');
-    setStartDate(start);
-    setEndDate(end);
+    setStartDate(order.start);
+    setEndDate(order.end);
     setRecipient(order.recipient);
     setVisible(true);
   }
@@ -81,9 +81,7 @@ export default function Dashboard({ location }) {
             {recipient.cidade} - {recipient.estado}
           </p>
           <p>{recipient.cep}</p>
-
           <h4>Datas</h4>
-
           <p>
             Retirada:
             {startDate === '31/12/1969' ? '' : startDate}
@@ -92,7 +90,6 @@ export default function Dashboard({ location }) {
             Entrega:
             {endDate === '31/12/1969' ? '' : endDate}
           </p>
-
           <h4>Assinatura do destinatário</h4>
           <img
             alt="assinatura"
