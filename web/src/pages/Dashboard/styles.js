@@ -42,7 +42,7 @@ export const Content = styled.div`
     padding: 0 15px;
     border-radius: 4px;
     border: 1px solid #eee;
-    background: #715c91;
+    background: #7d40e7;
     color: white;
     align-items: center;
     display: flex;
