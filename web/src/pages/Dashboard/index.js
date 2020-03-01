@@ -14,7 +14,7 @@ import {
   MdRemoveRedEye,
 } from 'react-icons/md';
 import queryString from 'query-string';
-import { format } from 'date-fns';
+import { format, isAfter } from 'date-fns';
 import Avatar from 'react-avatar';
 import history from '~/services/history';
 import { Container, Content, ContentTable } from './styles';
@@ -40,6 +40,7 @@ export default function Dashboard({ location }) {
         ...o,
         start: format(new Date(o.start_date), 'dd/MM/yyyy'),
         end: format(new Date(o.end_date), 'dd/MM/yyyy'),
+        status: isAfter(new Date(), new Date(o.start_date)),
       }));
 
       console.tron.log(data);
@@ -158,7 +159,7 @@ export default function Dashboard({ location }) {
                           <MdFiberManualRecord />
                           ENTREGUE
                         </li>
-                      ) : order.start_date ? (
+                      ) : order.start_date && order.status ? (
                         <li className="retirado">
                           <MdFiberManualRecord />
                           RETIRADA
@@ -180,7 +181,7 @@ export default function Dashboard({ location }) {
                       </button>
                       <Link
                         to={{
-                          pathname: `/orders/${order.id}`,
+                          pathname: `/editarencomenda/${order.id}`,
                           state: {
                             order,
                           },
