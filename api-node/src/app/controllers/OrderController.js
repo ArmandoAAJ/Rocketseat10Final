@@ -105,7 +105,7 @@ class OrderController {
             {
               model: Recipient,
               as: 'recipient',
-              attributes: ['id', 'name', 'cidade', 'estado'],
+              attributes: ['id', 'name', 'cidade', 'estado', 'rua', 'cep'],
             },
           ],
           limit: 10,
