@@ -1,6 +1,7 @@
 // Cadastro dados da entrega/cliente/entregador/produto
 import * as Yup from 'yup';
 import { Op } from 'sequelize';
+import { isAfter } from 'date-fns';
 import Order from '../models/Order';
 import Deliveryman from '../models/Deliveryman';
 import Recipient from '../models/Recipient';
@@ -39,7 +40,6 @@ class OrderController {
       recipient_id: Yup.number().required(),
       deliveryman_id: Yup.number().required(),
       product: Yup.string().required(),
-      canceled_at: Yup.date(),
     });
 
     if (!(await schema.isValid(req.body))) {
@@ -54,6 +54,20 @@ class OrderController {
     if (!order) {
       return res.status(401).json({
         ERRO: 'Não encontramos nenhuma entrega com os dados fornecidos',
+      });
+    }
+
+    if (order.canceled_at) {
+      return res.status(401).json({
+        ERRO: 'Encomendas canceladas não podem ser alteradas',
+      });
+    }
+
+    const deliverymanRetired = isAfter(new Date(), new Date(order.start_date));
+
+    if (deliverymanRetired && order.deliveryman_id !== deliveryman_id) {
+      return res.status(401).json({
+        ERRO: 'Você não pode alterar o Entregado de uma encomenda retirada',
       });
     }
 
@@ -78,7 +92,7 @@ class OrderController {
     const orders = q
       ? await Order.findAll({
           where: { product: { [Op.iLike]: `%${q}%` } },
-          order: ['product'],
+          order: ['id'],
           include: [
             {
               model: Deliveryman,
@@ -95,7 +109,7 @@ class OrderController {
           offset: (page - 1) * 10,
         })
       : await Order.findAll({
-          order: ['product'],
+          order: ['id'],
           include: [
             {
               model: Deliveryman,
