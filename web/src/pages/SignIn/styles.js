@@ -3,7 +3,7 @@ import styled from 'styled-components';
 export const Container = styled.div`
   height: 100%;
   min-height: 100vh;
-  background: #7159c1;
+  background: #7d40e7;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -70,7 +70,7 @@ export const Container = styled.div`
       height: 40px;
       border-radius: 4px;
       border: none;
-      background: #7159c1;
+      background: #7d40e7;
       color: #eee;
       transition: background 0.9s;
       font-size: 18px;
@@ -82,12 +82,12 @@ export const Container = styled.div`
       div {
         margin-left: 50%;
         border: 3px solid #fff;
-        border-top: 3px solid #7159c1;
+        border-top: 3px solid #7d40e7;
         border-radius: 50%;
         width: 25px;
         height: 25px;
         animation: spin 1s linear infinite;
-        background: #7159c1;
+        background: #7d40e7;
       }
 
       @keyframes spin {
