@@ -47,7 +47,7 @@ class OrderController {
     }
 
     const { id } = req.params;
-    const { recipient_id, deliveryman_id } = req.body;
+    const { recipient_id, deliveryman_id, product } = req.body;
 
     const order = await Order.findByPk(id);
 
@@ -57,9 +57,25 @@ class OrderController {
       });
     }
 
+    if (
+      order.recipient_id === recipient_id &&
+      order.deliveryman_id === deliveryman_id &&
+      order.product === product
+    ) {
+      return res.status(401).json({
+        ERRO: 'Altera alguma opção para salvar',
+      });
+    }
+
     if (order.canceled_at) {
       return res.status(401).json({
         ERRO: 'Encomendas canceladas não podem ser alteradas',
+      });
+    }
+
+    if (order.end_date) {
+      return res.status(401).json({
+        ERRO: 'Encomendas entregues não podem ser alteradas',
       });
     }
 
