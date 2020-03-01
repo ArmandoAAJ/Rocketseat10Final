@@ -4,18 +4,29 @@
 import React, { useEffect, useState } from 'react';
 import { Form, Input } from '@rocketseat/unform';
 import { Link } from 'react-router-dom';
+import Modal from 'react-awesome-modal';
 
-import { MdAdd, MdFiberManualRecord } from 'react-icons/md';
+import {
+  MdAdd,
+  MdFiberManualRecord,
+  MdDelete,
+  MdModeEdit,
+  MdRemoveRedEye,
+} from 'react-icons/md';
 import queryString from 'query-string';
+import { format } from 'date-fns';
 import Avatar from 'react-avatar';
 import history from '~/services/history';
 import { Container, Content, ContentTable } from './styles';
 import Header from '~/components/Header';
-import Notification from '~/components/Notificatios';
 import api from '~/services/api';
 
 export default function Dashboard({ location }) {
   const [orders, setOrders] = useState([]);
+  const [visible, setVisible] = useState(false);
+  const [recipient, setRecipient] = useState({});
+  const [startDate, setStartDate] = useState();
+  const [endDate, setEndDate] = useState();
 
   const { q } = queryString.parse(location.search);
 
@@ -35,8 +46,61 @@ export default function Dashboard({ location }) {
     history.push(`dashboard?q=${data.q}`);
   }
 
+  function openModal(order) {
+    // função para chamar o modal, passei no onclick o order com todos os dados
+    // filtrei as datas e formatei depois setei o estado
+    // Melhorar isso que não deve estar certo kkkk
+    const { start_date } = order;
+    const start = format(new Date(start_date), 'dd/MM/yyyy');
+    const { end_date } = order;
+    const end = format(new Date(end_date), 'dd/MM/yyyy');
+    setStartDate(start);
+    setEndDate(end);
+    setRecipient(order.recipient);
+    setVisible(true);
+  }
+
+  function closeModal() {
+    setVisible(false);
+  }
+
   return (
     <Container>
+      {/* Falta fazer a parte da img que está vindo fixa  */}
+      <Modal
+        visible={visible}
+        width="400"
+        height="350"
+        effect="fadeInDown"
+        onClickAway={() => closeModal()}
+      >
+        <div className="modal">
+          <h4>Informações da encomenda</h4>
+          <p>{recipient.rua}</p>
+          <p>
+            {recipient.cidade} - {recipient.estado}
+          </p>
+          <p>{recipient.cep}</p>
+
+          <h4>Datas</h4>
+
+          <p>
+            Retirada:
+            {startDate === '31/12/1969' ? '' : startDate}
+          </p>
+          <p>
+            Entrega:
+            {endDate === '31/12/1969' ? '' : endDate}
+          </p>
+
+          <h4>Assinatura do destinatário</h4>
+          <img
+            alt="assinatura"
+            src="https://upload.wikimedia.org/wikipedia/commons/d/dd/Monteiro_Lobato_ASSINATURA.jpg"
+          />
+        </div>
+      </Modal>
+
       <Header />
       <Content>
         <nav>
@@ -110,7 +174,37 @@ export default function Dashboard({ location }) {
                       )}
                     </td>
                     <td>
-                      <Notification />
+                      {/* Não consegui fazer o clic então criei 3 botões separados  */}
+                      <button
+                        className="icons"
+                        onClick={() => openModal(order)}
+                      >
+                        <MdRemoveRedEye color="#6A5ACD" />
+                      </button>
+                      <Link
+                        to={{
+                          pathname: `/orders/${order.id}`,
+                          state: {
+                            order,
+                          },
+                        }}
+                      >
+                        <button className="icons">
+                          <MdModeEdit color="#1E90FF" />
+                        </button>
+                      </Link>
+                      <Link
+                        to={{
+                          pathname: `/orders/${order.id}`,
+                          state: {
+                            order,
+                          },
+                        }}
+                      >
+                        <button className="icons">
+                          <MdDelete color="#B22222" />
+                        </button>
+                      </Link>
                     </td>
                   </tr>
                 ))}
