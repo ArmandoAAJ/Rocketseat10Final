@@ -53,7 +53,7 @@ export default function Dashboard({ location }) {
     }
 
     loadData();
-  }, [q, orders]);
+  }, [q]);
 
   function handleSubmit(data) {
     history.push(`dashboard?q=${data.q}`);
@@ -74,6 +74,7 @@ export default function Dashboard({ location }) {
     try {
       await api.delete(`orders/${id}`);
       toast.success('Encomenda deletada com sucesso');
+      history.push(`dashboard?q=`);
     } catch (err) {
       toast.error('Encomenda não encontrado!');
     }
@@ -234,7 +235,7 @@ export default function Dashboard({ location }) {
               </tbody>
             </table>
           ) : (
-            <h3>:(</h3>
+            <h3>não há nada por aqui :/</h3>
           )}
         </ContentTable>
       </Content>
