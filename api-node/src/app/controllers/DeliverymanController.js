@@ -32,8 +32,13 @@ class DeliverymanController {
     if (!avatarIdExist && req.body.avatar_id != null) {
       return res.status(401).json({ ERRO: 'Avatar Id não encontrado.' });
     }
-
-    const deliveryman = await Deliveryman.create(req.body);
+    const { name, email, avatar_id } = req.body;
+    const deliveryman = await Deliveryman.create({
+      name,
+      email,
+      avatar_id,
+      active: true,
+    });
 
     return res.json(deliveryman);
   }
@@ -86,7 +91,7 @@ class DeliverymanController {
 
     const deliveryman = q
       ? await Deliveryman.findAll({
-          where: { name: { [Op.iLike]: `%${q}%` } },
+          where: { name: { [Op.iLike]: `%${q}%` }, active: true },
           order: ['id'],
           include: [
             {
@@ -99,6 +104,7 @@ class DeliverymanController {
           offset: (page - 1) * 10,
         })
       : await Deliveryman.findAll({
+          where: { active: true },
           order: ['id'],
           include: [
             {
@@ -127,7 +133,7 @@ class DeliverymanController {
       return res.status(401).json({ ERRO: 'Deliveryman não encontrado' });
     }
 
-    await deliveryman.destroy();
+    await deliveryman.update({ active: false });
 
     return res.json(deliveryman);
   }
