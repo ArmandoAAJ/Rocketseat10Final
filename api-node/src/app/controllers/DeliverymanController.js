@@ -82,29 +82,31 @@ class DeliverymanController {
   }
 
   async index(req, res) {
-    const deliveryman = await Deliveryman.findAndCountAll({
-      order: ['id'],
-    });
-
-    if (deliveryman.count < 1) {
-      return res.status(401).json({ ERRO: 'Não há Deliveryman cadastrados' });
-    }
-
-    return res.json(deliveryman.rows);
-  }
-
-  async show(req, res) {
     const { q, page = 1 } = req.query;
 
     const deliveryman = q
       ? await Deliveryman.findAll({
           where: { name: { [Op.iLike]: `%${q}%` } },
-          order: ['name'],
+          order: ['id'],
+          include: [
+            {
+              model: File,
+              as: 'avatar',
+              attributes: ['id', 'path', 'url'],
+            },
+          ],
           limit: 10,
           offset: (page - 1) * 10,
         })
       : await Deliveryman.findAll({
-          order: ['name'],
+          order: ['id'],
+          include: [
+            {
+              model: File,
+              as: 'avatar',
+              attributes: ['id', 'path', 'url'],
+            },
+          ],
           limit: 10,
           offset: (page - 1) * 10,
         });
