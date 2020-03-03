@@ -48,8 +48,6 @@ routes.delete(
   authMiddleware,
   DeliverymanController.delete
 );
-// busca por nome do entregador
-routes.get('/deliverymans/search', authMiddleware, DeliverymanController.show);
 
 // Order
 routes.post('/orders', authMiddleware, OrderController.store);
