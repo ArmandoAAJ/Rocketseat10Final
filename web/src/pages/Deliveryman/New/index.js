@@ -35,7 +35,7 @@ export default function New() {
       <Form onSubmit={handleSubmit}>
         <Content>
           <nav>
-            <h2>Cadastro de Encomendas</h2>
+            <h2>Cadastro de Entregadores</h2>
             <div>
               <Link to="/entregador">
                 <button>
