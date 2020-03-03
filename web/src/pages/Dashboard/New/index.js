@@ -1,3 +1,4 @@
+/* eslint-disable no-empty */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable react/button-has-type */
 
@@ -22,19 +23,24 @@ export default function New() {
     async function loadSelect() {
       const responseDeliveryman = await api.get('deliverymans');
       const responseRecipients = await api.get('recipients');
+      try {
+        const dataDeliveryman = responseDeliveryman.data.map(d => ({
+          value: d.id,
+          label: d.name,
+        }));
 
-      const dataDeliveryman = responseDeliveryman.data.map(d => ({
-        value: d.id,
-        label: d.name,
-      }));
-
-      const dataRecipient = responseRecipients.data.map(r => ({
-        value: r.id,
-        label: r.name,
-      }));
-
-      setRecipients(dataRecipient);
-      setDeliverymans(dataDeliveryman);
+        const dataRecipient = responseRecipients.data.map(r => ({
+          value: r.id,
+          label: r.name,
+        }));
+        setRecipients(dataRecipient);
+        setDeliverymans(dataDeliveryman);
+      } catch (err) {
+        history.push('dashboard');
+        toast.error(
+          'É necessário ter ao menos um entregador e um destinatário para cadastrar uma encomenda'
+        );
+      }
     }
     loadSelect();
   }, []);
