@@ -70,7 +70,7 @@ export default function Dashboard({ location }) {
     setVisible(false);
   }
 
-  async function handleStudentDelete(id) {
+  async function handleOrderDelete(id) {
     try {
       await api.delete(`orders/${id}`);
       toast.success('Encomenda deletada com sucesso');
@@ -87,7 +87,7 @@ export default function Dashboard({ location }) {
       buttons: [
         {
           label: 'Sim',
-          onClick: () => handleStudentDelete(id),
+          onClick: () => handleOrderDelete(id),
         },
         {
           label: 'Não',
