@@ -9,6 +9,8 @@ import EditOrder from '~/pages/Dashboard/Edit';
 import Deliveryman from '~/pages/Deliveryman';
 import NewDeliveryman from '~/pages/Deliveryman/New';
 import EditDeliveryman from '~/pages/Deliveryman/Edit';
+import Recipient from '~/pages/Recipients';
+import EditRecipient from '~/pages/Recipients/Edit';
 
 export default function Routes() {
   return (
@@ -19,6 +21,12 @@ export default function Routes() {
       <Route path="/editarencomenda/:id" component={EditOrder} isPrivate />
       <Route path="/entregador" component={Deliveryman} isPrivate />
       <Route path="/novoentregador" component={NewDeliveryman} isPrivate />
+      <Route path="/destinatario" component={Recipient} isPrivate />
+      <Route
+        path="/editardestinatario/:id"
+        component={EditRecipient}
+        isPrivate
+      />
       <Route
         path="/editarentregador/:id"
         component={EditDeliveryman}
