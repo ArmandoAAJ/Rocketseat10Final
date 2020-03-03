@@ -25,10 +25,10 @@ export default function Header() {
           <NavLink to="/entregador" activeClassName="nav-color">
             ENTREGADORES
           </NavLink>
-          <NavLink to="/register" activeClassName="nav-color">
+          <NavLink to="/destinatario" activeClassName="nav-color">
             DESTINATÁRIOS
           </NavLink>
-          <NavLink to="/pedido" activeClassName="nav-color">
+          <NavLink to="/problema" activeClassName="nav-color">
             PROBLEMAS
           </NavLink>
         </nav>
