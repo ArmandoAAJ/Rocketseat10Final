@@ -22,7 +22,7 @@ export default function Header() {
           <NavLink to="/dashboard" activeClassName="nav-color">
             ENCOMENDAS
           </NavLink>
-          <NavLink to="/plans" activeClassName="nav-color">
+          <NavLink to="/entregador" activeClassName="nav-color">
             ENTREGADORES
           </NavLink>
           <NavLink to="/register" activeClassName="nav-color">
