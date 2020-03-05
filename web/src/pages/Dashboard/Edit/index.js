@@ -13,13 +13,16 @@ import Header from '~/components/Header';
 import api from '~/services/api';
 import history from '~/services/history';
 
-export default function Edit({ location }) {
+export default function Edit({ location, match }) {
   // Pego os dados do state e seto as variaveis que vou usar
   const stateOrder = location.state ? location.state.order : [];
   const initialData = stateOrder; // Passar o initial data do form
+  const { id } = match.params;
 
-  const [opRecipients, setOpRecipients] = useState();
-  const [opDeliverymans, setOpDeliverymans] = useState();
+  const [opRecipients, setOpRecipients] = useState(stateOrder.optionsRecipient);
+  const [opDeliverymans, setOpDeliverymans] = useState(
+    stateOrder.optionsDelivery
+  );
 
   const [deliverymans, setDeliverymans] = useState();
   const [recipients, setRecipients] = useState();
@@ -50,21 +53,21 @@ export default function Edit({ location }) {
   }, []);
 
   async function handleSubmit({ product }) {
-    const recipient_id = opRecipients.value;
-    const deliveryman_id = opDeliverymans.value;
+    try {
+      const recipient_id = opRecipients.value;
+      const deliveryman_id = opDeliverymans.value;
 
-    const response = await api.post('orders', {
-      recipient_id,
-      deliveryman_id,
-      product,
-    });
+      await api.put(`orders/${id}`, {
+        recipient_id,
+        deliveryman_id,
+        product,
+      });
 
-    if (response) {
       history.push('/dashboard');
       toast.success('Edição bem sucedida!');
+    } catch (error) {
+      toast.error(error.response.data.ERRO);
     }
-
-    toast.error(response.data.ERRO);
   }
 
   return (
@@ -92,6 +95,7 @@ export default function Edit({ location }) {
               <label>
                 Destinatário
                 <Select
+                  placeholder={opRecipients.label}
                   name="optionsDeliveryman"
                   options={recipients}
                   onChange={e => setOpRecipients(e)}
@@ -100,6 +104,7 @@ export default function Edit({ location }) {
               <label>
                 Entregador
                 <Select
+                  placeholder={opDeliverymans.label}
                   name="optionsRecipient"
                   options={deliverymans}
                   onChange={e => setOpDeliverymans(e)}

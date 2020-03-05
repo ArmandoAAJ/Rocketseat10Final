@@ -75,6 +75,9 @@ export const StudentsContent = styled.div`
     .css-2b097c-container {
       margin-top: 2%;
     }
+    .css-1wa3eu0-placeholder {
+      color: hsl(0, 0%, 0%);
+    }
   }
   input:last-child {
     margin-top: 5px;

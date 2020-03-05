@@ -27,7 +27,7 @@ import api from '~/services/api';
 export default function Dashboard({ location }) {
   const [orders, setOrders] = useState([]);
   const [visible, setVisible] = useState(false);
-  const [recipient, setRecipient] = useState({});
+  const [recipient, setRecipient] = useState([]);
   const [startDate, setStartDate] = useState();
   const [endDate, setEndDate] = useState();
 
@@ -133,10 +133,7 @@ export default function Dashboard({ location }) {
             {endDate === '31/12/1969' ? '' : endDate}
           </p>
           <h4>Assinatura do destinatário</h4>
-          <img
-            alt="assinatura"
-            src="https://upload.wikimedia.org/wikipedia/commons/d/dd/Monteiro_Lobato_ASSINATURA.jpg"
-          />
+          <img alt="assinatura" src="" />
         </div>
       </Modal>
 
