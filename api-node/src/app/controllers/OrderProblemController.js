@@ -1,6 +1,6 @@
 // Cadastro problemas na entrega
 import * as Yup from 'yup';
-import Problem from '../models/Problem';
+import OrderProblem from '../models/OrderProblem';
 import Order from '../models/Order';
 
 class OrderProblemControler {
@@ -22,7 +22,33 @@ class OrderProblemControler {
       return res.status(401).json({ ERRO: 'Verifique a entrega desejada.' });
     }
 
-    const problem = await Problem.create(req.body);
+    const problem = await OrderProblem.create(req.body);
+
+    return res.json(problem);
+  }
+
+  async index(req, res) {
+    const { id } = req.params;
+
+    const problem = await OrderProblem.findOne({
+      where: {
+        order_id: id,
+      },
+    });
+
+    if (!problem) {
+      return res.status(401).json({ ERRO: 'Encomenda não encontrada' });
+    }
+
+    return res.json(problem);
+  }
+
+  async show(req, res) {
+    const problem = await OrderProblem.findAll();
+
+    if (!problem) {
+      return res.status(401).json({ ERRO: 'Não há encomenda com problema' });
+    }
 
     return res.json(problem);
   }
@@ -30,7 +56,7 @@ class OrderProblemControler {
   async delete(req, res) {
     const { id } = req.params;
 
-    const problem = await Problem.findByPk(id);
+    const problem = await OrderProblem.findByPk(id);
 
     if (!problem) {
       return res.status(401).json({ ERRO: 'Não há entrega com problema' });
@@ -54,16 +80,6 @@ class OrderProblemControler {
     await orders.save();
 
     return res.json(orders);
-  }
-
-  async index(req, res) {
-    const problem = await Problem.findAll();
-
-    if (!problem) {
-      return res.status(401).json({ ERRO: 'Não nenhum problema cadastrado!' });
-    }
-
-    return res.json(problem);
   }
 }
 

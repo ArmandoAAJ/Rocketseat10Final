@@ -11,8 +11,6 @@ import NewDeliveryman from '~/pages/Deliveryman/New';
 import EditDeliveryman from '~/pages/Deliveryman/Edit';
 import Recipient from '~/pages/Recipients';
 import EditRecipient from '~/pages/Recipients/Edit';
-import NewRecipient from '~/pages/Recipients/New';
-import Problems from '~/pages/Problems';
 
 export default function Routes() {
   return (
@@ -34,8 +32,6 @@ export default function Routes() {
         component={EditDeliveryman}
         isPrivate
       />
-      <Route path="/novodestinatario" component={NewRecipient} isPrivate />
-      <Route path="/problemas" component={Problems} isPrivate />
     </Switch>
   );
 }

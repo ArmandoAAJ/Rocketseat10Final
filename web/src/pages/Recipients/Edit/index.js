@@ -12,7 +12,7 @@ import Header from '~/components/Header';
 import api from '~/services/api';
 import history from '~/services/history';
 
-export default function Edit({ location, match }) {
+export default function New({ location, match }) {
   // Pego os dados do state e seto as variaveis que vou usar
   const stateOrder = location.state ? location.state.recipient : [];
   const initialData = stateOrder; // Passar o initial data do form

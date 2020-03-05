@@ -20,7 +20,7 @@ import OrderStartController from './app/controllers/OrderStartController';
 
 import OrderEndController from './app/controllers/OrderEndController';
 
-import ProblemController from './app/controllers/ProblemController';
+import OrderProblemController from './app/controllers/OrderProblemController';
 
 const routes = new Router();
 const upload = multer(multerConfig);
@@ -67,10 +67,17 @@ routes.put('/orders/:id/start', OrderStartController.update);
 routes.put('/orders/:id/end', OrderEndController.update);
 
 // delivery error
-routes.post('/orders/problems', ProblemController.store);
-
-routes.get('/problems', authMiddleware, ProblemController.index);
-
-routes.delete('/problems/:id', authMiddleware, ProblemController.delete);
+routes.post('/orders/problems', OrderProblemController.store);
+routes.get(
+  '/orders/problems/:id',
+  authMiddleware,
+  OrderProblemController.index
+);
+routes.get('/orders/problems', authMiddleware, OrderProblemController.show);
+routes.delete(
+  '/orders/problems/:id',
+  authMiddleware,
+  OrderProblemController.delete
+);
 
 export default routes;

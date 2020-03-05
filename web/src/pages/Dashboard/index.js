@@ -42,19 +42,10 @@ export default function Dashboard({ location }) {
       try {
         const data = response.data.map(o => ({
           ...o,
-          optionsDelivery: {
-            value: o.deliveryman.id,
-            label: o.deliveryman.name,
-          },
-          optionsRecipient: {
-            value: o.recipient.id,
-            label: o.recipient.name,
-          },
           start: format(new Date(o.start_date), 'dd/MM/yyyy'),
           end: format(new Date(o.end_date), 'dd/MM/yyyy'),
           status: isAfter(new Date(), new Date(o.start_date)),
         }));
-
         setOrders(data);
       } catch (err) {
         setOrders(response.data);
@@ -85,7 +76,7 @@ export default function Dashboard({ location }) {
       toast.success('Encomenda deletada com sucesso');
       history.push(`dashboard?q=`);
     } catch (err) {
-      toast.error(err.response.data.ERRO);
+      toast.error('Encomenda não encontrado!');
     }
   }
 
@@ -164,6 +155,7 @@ export default function Dashboard({ location }) {
                   <th>ID</th>
                   <th>Destinatário</th>
                   <th>Entregador</th>
+                  <th>Produto</th>
                   <th>Cidade</th>
                   <th>Estado</th>
                   <th>Status</th>
@@ -173,9 +165,7 @@ export default function Dashboard({ location }) {
               <tbody>
                 {orders.map(order => (
                   <tr key={order.id}>
-                    <td>
-                      {order.id < 10 ? `# 0${order.id}` : `# ${order.id}`}
-                    </td>
+                    <td>#{order.id}</td>
                     <td>{order.recipient.name}</td>
                     <td>
                       <Avatar
@@ -187,6 +177,7 @@ export default function Dashboard({ location }) {
                       &nbsp;&nbsp;
                       {order.deliveryman.name}
                     </td>
+                    <td>{order.product}</td>
                     <td>{order.recipient.cidade}</td>
                     <td>{order.recipient.estado}</td>
                     <td>

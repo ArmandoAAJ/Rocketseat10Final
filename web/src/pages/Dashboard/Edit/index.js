@@ -13,38 +13,37 @@ import Header from '~/components/Header';
 import api from '~/services/api';
 import history from '~/services/history';
 
-export default function Edit({ location }) {
+export default function New({ location, match }) {
   // Pego os dados do state e seto as variaveis que vou usar
   const stateOrder = location.state ? location.state.order : [];
   const initialData = stateOrder; // Passar o initial data do form
-
-  const [opRecipients, setOpRecipients] = useState();
-  const [opDeliverymans, setOpDeliverymans] = useState();
-
+  const { id } = match.params;
   const [deliverymans, setDeliverymans] = useState();
   const [recipients, setRecipients] = useState();
+  const [opRecipients, setOpRecipients] = useState({
+    value: initialData.recipient_id,
+  });
+  const [opDeliverymans, setOpDeliverymans] = useState({
+    value: initialData.deliveryman_id,
+  });
 
   useEffect(() => {
     async function loadSelect() {
-      const response = await api.get('deliverymans');
-      const responseR = await api.get('recipients');
+      const responseDeliveryman = await api.get('deliverymans');
+      const responseRecipients = await api.get('recipients');
 
-      try {
-        const data = response.data.map(d => ({
-          label: d.name,
-          value: d.id,
-        }));
+      const dataDeliveryman = responseDeliveryman.data.map(d => ({
+        value: d.id,
+        label: d.name,
+      }));
 
-        const dataR = responseR.data.map(r => ({
-          label: r.name,
-          value: r.id,
-        }));
+      const dataRecipient = responseRecipients.data.map(r => ({
+        value: r.id,
+        label: r.name,
+      }));
 
-        setDeliverymans(data);
-        setRecipients(dataR);
-      } catch (error) {
-        toast.warning(response.data.ERRO);
-      }
+      setRecipients(dataRecipient);
+      setDeliverymans(dataDeliveryman);
     }
     loadSelect();
   }, []);
@@ -52,25 +51,25 @@ export default function Edit({ location }) {
   async function handleSubmit({ product }) {
     const recipient_id = opRecipients.value;
     const deliveryman_id = opDeliverymans.value;
-
-    const response = await api.post('orders', {
-      recipient_id,
-      deliveryman_id,
-      product,
-    });
-
-    if (response) {
-      history.push('/dashboard');
-      toast.success('Edição bem sucedida!');
+    try {
+      const response = await api.put(`orders/${id}`, {
+        recipient_id,
+        deliveryman_id,
+        product,
+      });
+      if (response) {
+        toast.success('Registro salvo!');
+        history.push('/dashboard');
+      }
+    } catch (err) {
+      toast.error(err.response.data.ERRO);
     }
-
-    toast.error(response.data.ERRO);
   }
 
   return (
     <Container>
       <Header />
-      <Form initialData={initialData} onSubmit={handleSubmit}>
+      <Form onSubmit={handleSubmit} initialData={initialData}>
         <Content>
           <nav>
             <h2>Edição de Encomendas</h2>
@@ -92,17 +91,17 @@ export default function Edit({ location }) {
               <label>
                 Destinatário
                 <Select
-                  name="optionsDeliveryman"
-                  options={recipients}
                   onChange={e => setOpRecipients(e)}
+                  options={recipients}
+                  placeholder={initialData.recipient.name}
                 />
               </label>
               <label>
                 Entregador
                 <Select
-                  name="optionsRecipient"
-                  options={deliverymans}
                   onChange={e => setOpDeliverymans(e)}
+                  options={deliverymans}
+                  placeholder={initialData.deliveryman.name}
                 />
               </label>
             </div>

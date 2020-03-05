@@ -16,14 +16,13 @@ import history from '~/services/history';
 export default function New() {
   const [deliverymans, setDeliverymans] = useState();
   const [recipients, setRecipients] = useState();
-  const [opRecipients, setOpRecipients] = useState();
-  const [opDeliverymans, setOpDeliverymans] = useState();
+  const [opRecipients, setOpRecipients] = useState({});
+  const [opDeliverymans, setOpDeliverymans] = useState({});
 
   useEffect(() => {
     async function loadSelect() {
       const responseDeliveryman = await api.get('deliverymans');
       const responseRecipients = await api.get('recipients');
-
       try {
         const dataDeliveryman = responseDeliveryman.data.map(d => ({
           value: d.id,
@@ -37,8 +36,10 @@ export default function New() {
         setRecipients(dataRecipient);
         setDeliverymans(dataDeliveryman);
       } catch (err) {
-        toast.warning(responseRecipients.data.ERRO);
-        toast.warning(responseDeliveryman.data.ERRO);
+        history.push('dashboard');
+        toast.error(
+          'É necessário ter ao menos um entregador e um destinatário para cadastrar uma encomenda'
+        );
       }
     }
     loadSelect();
@@ -47,19 +48,19 @@ export default function New() {
   async function handleSubmit({ product }) {
     const recipient_id = opRecipients.value;
     const deliveryman_id = opDeliverymans.value;
-
-    const response = await api.post('orders', {
-      recipient_id,
-      deliveryman_id,
-      product,
-    });
-
-    if (response) {
-      history.push('dashboard');
-      toast.success('Entrega criada com sucesso!');
+    try {
+      const response = await api.post('orders', {
+        recipient_id,
+        deliveryman_id,
+        product,
+      });
+      if (response) {
+        toast.success('Registro salvo!');
+        history.push('/dashboard');
+      }
+    } catch (err) {
+      toast.error(err.response.data.ERRO);
     }
-
-    toast.error(response.data.ERRO);
   }
 
   return (

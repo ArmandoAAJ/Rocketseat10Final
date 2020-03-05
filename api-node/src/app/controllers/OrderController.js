@@ -79,17 +79,12 @@ class OrderController {
       });
     }
 
-    if (order.start_date !== null) {
-      const deliverymanRetired = isAfter(
-        new Date(),
-        new Date(order.start_date)
-      );
+    const deliverymanRetired = isAfter(new Date(), new Date(order.start_date));
 
-      if (deliverymanRetired && order.deliveryman_id !== deliveryman_id) {
-        return res.status(401).json({
-          ERRO: 'Você não pode alterar o Entregado de uma encomenda retirada',
-        });
-      }
+    if (deliverymanRetired && order.deliveryman_id !== deliveryman_id) {
+      return res.status(401).json({
+        ERRO: 'Você não pode alterar o Entregado de uma encomenda retirada',
+      });
     }
 
     const deliveriman = await Deliveryman.findByPk(deliveryman_id);

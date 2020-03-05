@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable react/prop-types */
 /* eslint-disable react/button-has-type */
 /* eslint-disable react/jsx-no-undef */
@@ -8,14 +7,12 @@ import { Link } from 'react-router-dom';
 import queryString from 'query-string';
 import { Form, Input } from '@rocketseat/unform';
 import { MdAdd, MdDelete, MdModeEdit } from 'react-icons/md';
-import { confirmAlert } from 'react-confirm-alert';
-import { toast } from 'react-toastify';
 import api from '~/services/api';
 import history from '~/services/history';
 import { Container, Content, ContentTable } from './styles';
 import Header from '~/components/Header';
 
-export default function Recipients({ location }) {
+export default function Dashboard({ location }) {
   const [recipients, setRecipients] = useState([]);
   const { q } = queryString.parse(location.search);
 
@@ -31,34 +28,7 @@ export default function Recipients({ location }) {
   }, [q]);
 
   function handleSubmit(data) {
-    history.push(`destinatario?q=${data.q}`);
-  }
-
-  async function handleRecipientDelete(id) {
-    try {
-      await api.delete(`recipients/${id}`);
-      toast.success('Destinatário deletado com sucesso');
-      history.push(`destinatario?q=`);
-    } catch (err) {
-      toast.error('Destinatário não encontrado!');
-    }
-  }
-
-  function confirmRecipientDelete(id) {
-    confirmAlert({
-      title: 'Deletar Destinatário',
-      message: 'Você está certo disso? Não poderá desfazer está ação!',
-      buttons: [
-        {
-          label: 'Sim',
-          onClick: () => handleRecipientDelete(id),
-        },
-        {
-          label: 'Não',
-          onClick: () => {},
-        },
-      ],
-    });
+    history.push(`destinattario?q=${data.q}`);
   }
 
   return (
@@ -93,11 +63,7 @@ export default function Recipients({ location }) {
               <tbody>
                 {recipients.map(recipient => (
                   <tr>
-                    <td>
-                      {recipient.id < 10
-                        ? `# 0${recipient.id}`
-                        : `# ${recipient.id}`}
-                    </td>
+                    <td>#{recipient.id}</td>
                     <td>{recipient.name}</td>
                     <td>
                       {recipient.rua}, {recipient.numero}, {recipient.cidade}-
@@ -118,9 +84,7 @@ export default function Recipients({ location }) {
                           <MdModeEdit color="#1E90FF" />
                         </button>
                       </Link>
-                      <Link
-                        onClick={() => confirmRecipientDelete(recipient.id)}
-                      >
+                      <Link>
                         <button className="icons">
                           <MdDelete color="#B22222" />
                         </button>

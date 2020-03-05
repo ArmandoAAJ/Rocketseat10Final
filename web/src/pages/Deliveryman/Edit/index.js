@@ -14,7 +14,7 @@ import history from '~/services/history';
 
 import AvatarInput from '../AvatarInput';
 
-export default function Edit({ location, match }) {
+export default function New({ location, match }) {
   const stateOrder = location.state ? location.state.deliveryman : [];
   const initialData = stateOrder; // Passar o initial data do form
   const { id } = match.params;
