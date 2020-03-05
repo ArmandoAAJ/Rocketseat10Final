@@ -16,7 +16,7 @@ import history from '~/services/history';
 import { Container, Content, ContentTable } from './styles';
 import Header from '~/components/Header';
 
-export default function Dashboard({ location }) {
+export default function New({ location }) {
   const [deliverymans, setDeliverymans] = useState([]);
 
   const { q } = queryString.parse(location.search);
@@ -105,7 +105,11 @@ export default function Dashboard({ location }) {
               <tbody>
                 {deliverymans.map(deliveryman => (
                   <tr key={deliveryman.id}>
-                    <td>#{deliveryman.id}</td>
+                    <td>
+                      {deliveryman.id < 10
+                        ? `# 0${deliveryman.id}`
+                        : `# ${deliveryman.id}`}
+                    </td>
                     <td>
                       <Avatar
                         round

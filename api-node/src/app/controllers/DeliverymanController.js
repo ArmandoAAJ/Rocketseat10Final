@@ -118,7 +118,7 @@ class DeliverymanController {
         });
 
     if (deliveryman.length <= 0) {
-      return res.json({ error: 'Não encontramos nada com sua busca!' });
+      return res.json({ ERRO: 'Não há Entregadores cadastrado!' });
     }
 
     return res.json(deliveryman);

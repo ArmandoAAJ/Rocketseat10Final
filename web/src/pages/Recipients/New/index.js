@@ -12,37 +12,46 @@ import Header from '~/components/Header';
 import api from '~/services/api';
 import history from '~/services/history';
 
-import AvatarInput from '../AvatarInput';
-
-export default function Edit({ location, match }) {
-  const stateOrder = location.state ? location.state.deliveryman : [];
-  const initialData = stateOrder; // Passar o initial data do form
-  const { id } = match.params;
-
-  async function handleSubmit({ avatar_id, email, name }) {
+export default function New() {
+  async function handleSubmit({
+    name,
+    email,
+    rua,
+    numero,
+    complemento,
+    cidade,
+    estado,
+    cep,
+  }) {
     try {
-      const response = await api.put(`deliverymans/${id}`, {
+      const response = await api.post('recipients', {
         name,
         email,
-        avatar_id,
+        rua,
+        numero,
+        complemento,
+        cidade,
+        estado,
+        cep,
       });
       if (response) {
         toast.success('Registro salvo!');
-        history.push('/entregador');
+        history.push('/destinatario');
       }
     } catch (err) {
       toast.error(err.response.data.ERRO);
     }
   }
+
   return (
     <Container>
       <Header />
-      <Form onSubmit={handleSubmit} initialData={initialData}>
+      <Form onSubmit={handleSubmit}>
         <Content>
           <nav>
-            <h2>Edição de Entregadores</h2>
+            <h2>Criação de Destinatário</h2>
             <div>
-              <Link to="/entregador">
+              <Link to="/destinatario">
                 <button>
                   <MdChevronLeft size={19} />
                   &nbsp;Voltar
@@ -55,11 +64,36 @@ export default function Edit({ location, match }) {
             </div>
           </nav>
           <StudentsContent>
-            <AvatarInput name="avatar" required />
             <label> Nome</label>
-            <Input name="name" placeholder="Digite o nome " required />
-            <label> Email</label>
-            <Input name="email" placeholder="Digite o email" required />
+            <Input name="name" required />
+            <div>
+              <label className="street">
+                Rua
+                <Input name="rua" required />
+              </label>
+              <label>
+                Número
+                <Input name="numero" required />
+              </label>
+              <label>
+                Complemento
+                <Input name="complemento" />
+              </label>
+            </div>
+            <div>
+              <label>
+                Cidade
+                <Input name="cidade" required />
+              </label>
+              <label>
+                Estado
+                <Input name="estado" required />
+              </label>
+              <label>
+                Cep
+                <Input name="cep" required />
+              </label>
+            </div>
           </StudentsContent>
         </Content>
       </Form>
