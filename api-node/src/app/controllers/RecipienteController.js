@@ -77,7 +77,7 @@ class SessionController {
         });
 
     if (recipient.length <= 0) {
-      return res.json({ error: 'Não encontramos nada com sua busca!' });
+      return res.json({ ERRO: 'Não há Destinatário cadastrado!' });
     }
 
     return res.json(recipient);
