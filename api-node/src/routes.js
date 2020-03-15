@@ -12,6 +12,8 @@ import FileController from './app/controllers/FileController';
 
 import DeliverymanController from './app/controllers/DeliverymanController';
 
+import SignDelivery from './app/controllers/SignDelivery';
+
 import OrderController from './app/controllers/OrderController';
 
 import ListOrderController from './app/controllers/ListOrder';
@@ -49,6 +51,10 @@ routes.delete(
   authMiddleware,
   DeliverymanController.delete
 );
+
+// sign deliveryman mobile
+
+routes.get('/deliverymans/:id', SignDelivery.index);
 
 // Order
 routes.post('/orders', authMiddleware, OrderController.store);
