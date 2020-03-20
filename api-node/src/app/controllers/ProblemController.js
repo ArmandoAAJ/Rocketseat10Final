@@ -65,6 +65,23 @@ class OrderProblemControler {
 
     return res.json(problem);
   }
+
+  async show(req, res) {
+    const { order_id } = req.params;
+
+    const problem = await Problem.findAll({
+      where: {
+        order_id,
+      },
+      order: ['created_at'],
+    });
+
+    if (!problem) {
+      return res.status(401).json({ ERRO: 'Não nenhum problema cadastrado!' });
+    }
+
+    return res.json(problem);
+  }
 }
 
 export default new OrderProblemControler();

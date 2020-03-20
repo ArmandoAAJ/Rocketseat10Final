@@ -77,6 +77,8 @@ routes.post('/orders/problems', ProblemController.store);
 
 routes.get('/problems', authMiddleware, ProblemController.index);
 
+routes.get('/problems/:order_id', ProblemController.show);
+
 routes.delete('/problems/:id', authMiddleware, ProblemController.delete);
 
 export default routes;

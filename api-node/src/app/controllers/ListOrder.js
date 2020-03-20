@@ -2,6 +2,7 @@
 import { Op } from 'sequelize';
 import Order from '../models/Order';
 import Deliveryman from '../models/Deliveryman';
+import Recipient from '../models/Recipient';
 
 class ListOrder {
   async index(req, res) {
@@ -18,6 +19,22 @@ class ListOrder {
     const order = await Order.findAll({
       where: { deliveryman_id: id, canceled_at: null, end_date: null },
       order: ['id'],
+      include: [
+        {
+          model: Recipient,
+          as: 'recipient',
+          attributes: [
+            'id',
+            'name',
+            'rua',
+            'numero',
+            'complemento',
+            'estado',
+            'cidade',
+            'cep',
+          ],
+        },
+      ],
     });
 
     if (order.length < 1) {

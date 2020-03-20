@@ -1,6 +1,7 @@
 // Busca por entregadores -- Sign mobile
 
 import Deliveryman from '../models/Deliveryman';
+import Files from '../models/File';
 
 class SignDelivery {
   async index(req, res) {
@@ -8,6 +9,13 @@ class SignDelivery {
 
     const deliveryman = await Deliveryman.findOne({
       where: { id },
+      include: [
+        {
+          model: Files,
+          as: 'avatar',
+          attributes: ['id', 'path', 'url'],
+        },
+      ],
     });
 
     if (!deliveryman) {
