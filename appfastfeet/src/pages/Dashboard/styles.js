@@ -1,13 +1,16 @@
 import styled from 'styled-components/native';
+import { RectButton } from 'react-native-gesture-handler';
 
 export const Container = styled.View`
   flex: 1;
   padding: 15px;
+  background-color: 'rgb(255, 255, 255)';
 `;
 
 export const Header = styled.View`
   display: flex;
   flex-direction: row;
+  padding-bottom: 10px;
 `;
 
 export const Nav = styled.View`
@@ -81,6 +84,39 @@ export const TextNumberEncomenda = styled.Text`
   color: 'rgb(125, 64, 231)';
 `;
 
+export const BoxPogress = styled.View`
+  display: flex;
+  flex-direction: column;
+  padding: 0 20px;
+`;
+
+export const ProgressBar = styled.View`
+  display: flex;
+  flex-direction: row;
+  height: 30px;
+  align-items: center;
+  justify-content: center;
+`;
+
+export const DotHolder = styled.View`
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+`;
+
+export const Dot = styled.View`
+  height: 12px;
+  width: 12px;
+  border: 1px solid #7d40e7;
+  background: ${props => (props.done ? '#7d40e7' : '#fff')};
+  border-radius: 6px;
+`;
+
+export const Line = styled.View`
+  width: 40%;
+  border: 1px solid #7d40e7;
+`;
+
 export const BoxFooter = styled.View`
   background-color: 'rgb(240, 240, 245)';
   display: flex;
@@ -126,8 +162,12 @@ export const Details = styled.View`
   flex-direction: column;
 `;
 
-export const TextLinkDetails = styled.Text`
-  font-size: 13px;
-  font-weight: bold;
+export const TextDetails = styled.Text`
+  font-size: 14px;
   color: 'rgb(125, 64, 231)';
+  font-weight: bold;
+`;
+
+export const LinkDetails = styled(RectButton)`
+  background-color: 'rgb(240, 240, 245)';
 `;
