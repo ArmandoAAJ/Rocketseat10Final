@@ -1,21 +1,20 @@
-import React, { useState, useEffect } from 'react';
-import '~/config/ReactotronConfig';
-import AsyncStorage from '@react-native-community/async-storage';
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { PersistGate } from 'redux-persist/integration/react';
+import './config/ReactotronConfig';
+import { Provider } from 'react-redux';
+import Routes from './Routes/routes';
 
-import createRouter from '~/routes';
+import { store, persistor } from './store/index';
 
 export default function App() {
-  const [signedIn, setSignedIn] = useState();
-
-  useEffect(() => {
-    async function teste() {
-      const logedIn = await AsyncStorage.getItem('logado');
-      setSignedIn(JSON.parse(logedIn));
-    }
-    teste();
-  }, [signedIn, setSignedIn]);
-
-  const Routes = createRouter(signedIn);
-
-  return <Routes />;
+  return (
+    <Provider store={store}>
+      <PersistGate persistor={persistor}>
+        <NavigationContainer>
+          <Routes />
+        </NavigationContainer>
+      </PersistGate>
+    </Provider>
+  );
 }
