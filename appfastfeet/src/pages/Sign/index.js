@@ -1,38 +1,38 @@
 import React, { useState } from 'react';
+import { Image, StatusBar } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
 
-import { Image, Alert } from 'react-native';
-import AsyncStorage from '@react-native-community/async-storage';
-import api from '~/services/api';
+import { signInRequest } from '~/store/modules/auth/actions';
 
 import { Container, Input, Button, Text } from './styles';
 import Logo from '~/assets/img/logo.png';
 
 export default function Sign() {
-  const [userIds, setUserIds] = useState('');
+  const dispatch = useDispatch();
+  const [id, setID] = useState('');
 
-  async function loadDeliveryman() {
-    try {
-      await api.get(`deliverymans/${userIds}`);
-      AsyncStorage.setItem('logado', JSON.stringify(true));
-    } catch (error) {
-      AsyncStorage.setItem('logado', JSON.stringify(false));
-      Alert.alert('Falha no acesso', 'Verifique seu ID e tente novamente');
-    }
+  const loading = useSelector(state => state.auth.loading);
+
+  function handleSubmit() {
+    dispatch(signInRequest(id));
   }
 
   return (
-    <Container>
-      <Image source={Logo} tintColor="rgb(255, 255, 255)" />
-      <Input
-        placeholder="Informe seu ID de cadastro"
-        keyboardType="numeric"
-        returnKeyType="send"
-        onSubmitEditing={loadDeliveryman}
-        onChangeText={setUserIds}
-      />
-      <Button onPress={loadDeliveryman}>
-        <Text>Entrar no sistema</Text>
-      </Button>
-    </Container>
+    <>
+      <StatusBar backgroundColor="rgb(125, 64, 231)" barStyle="light-content" />
+      <Container>
+        <Image source={Logo} tintColor="rgb(255, 255, 255)" />
+        <Input
+          placeholder="Informe seu ID de cadastro"
+          keyboardType="numeric"
+          returnKeyType="send"
+          onSubmitEditing={handleSubmit}
+          onChangeText={setID}
+        />
+        <Button loading={loading} onPress={handleSubmit}>
+          <Text>Entrar no sistema</Text>
+        </Button>
+      </Container>
+    </>
   );
 }
