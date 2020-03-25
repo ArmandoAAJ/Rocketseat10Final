@@ -112,7 +112,9 @@ export default function Details({ route, navigation }) {
               <Icon name="error-outline" size={25} color="rgb(233, 194, 87)" />
               <TextProblem>Visualizar Problemas</TextProblem>
             </ViewProblem>
-            <Confirm>
+            <Confirm
+              onPress={() => navigation.navigate('Signature', { order })}
+            >
               <Icon name="check-circle" size={25} color="rgb(125, 64, 231)" />
               <TextProblem>Confirmar Entregas</TextProblem>
             </Confirm>
