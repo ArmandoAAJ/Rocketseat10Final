@@ -15,13 +15,14 @@ import {
 
 export default function ViewProblem({ route }) {
   const [problems, setProblems] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const { order } = route.params;
 
   useEffect(() => {
     async function loadProblem() {
       try {
         const response = await api.get(`/problems/${order.id}`);
+
         const data = response.data.map(p => ({
           ...p,
           dateFormatted: format(parseISO(p.createdAt), 'dd/MM/yyyy', {
@@ -38,14 +39,13 @@ export default function ViewProblem({ route }) {
     loadProblem();
   }, [order]);
 
-  console.tron.log(loading);
   return (
     <>
       <StatusBar backgroundColor="rgb(125, 64, 231)" barStyle="light-content" />
       <Container>
         <Header>
           <Box>
-            {loading ? (
+            {!loading ? (
               <ActivityIndicator
                 size="large"
                 color="rgb(125, 64, 231)"
