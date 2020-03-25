@@ -3,6 +3,7 @@ import { Op } from 'sequelize';
 import Order from '../models/Order';
 import Deliveryman from '../models/Deliveryman';
 import Recipient from '../models/Recipient';
+import File from '../models/File';
 
 class ListOrder {
   async index(req, res) {
@@ -34,6 +35,10 @@ class ListOrder {
             'cep',
           ],
         },
+        {
+          model: File,
+          as: 'signature',
+        },
       ],
     });
 
@@ -62,6 +67,26 @@ class ListOrder {
           [Op.ne]: null,
         },
       },
+      include: [
+        {
+          model: Recipient,
+          as: 'recipient',
+          attributes: [
+            'id',
+            'name',
+            'rua',
+            'numero',
+            'complemento',
+            'estado',
+            'cidade',
+            'cep',
+          ],
+        },
+        {
+          model: File,
+          as: 'signature',
+        },
+      ],
     });
 
     if (order < 1) {
