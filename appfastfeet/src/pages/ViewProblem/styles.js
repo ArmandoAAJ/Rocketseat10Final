@@ -15,6 +15,7 @@ export const Box = styled.View`
   background-color: 'rgb(255, 255, 255)';
   border-radius: 5px;
   border: 1px solid #fff;
+  min-height: 400px;
 `;
 
 export const BoxProblem = styled.View`

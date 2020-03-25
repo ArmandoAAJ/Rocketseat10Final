@@ -45,7 +45,7 @@ export default function ViewProblem({ route }) {
       <Container>
         <Header>
           <Box>
-            {loading ? (
+            {!loading ? (
               <ActivityIndicator
                 size="large"
                 color="rgb(125, 64, 231)"
