@@ -76,7 +76,7 @@ class OrderProblemControler {
       order: ['created_at'],
     });
 
-    if (!problem) {
+    if (problem.length < 1) {
       return res.status(401).json({ ERRO: 'Não nenhum problema cadastrado!' });
     }
 
