@@ -3,9 +3,11 @@ import { createStackNavigator } from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import Dashboard from '~/pages/Dashboard';
+import Delivered from '~/pages/Delivered';
 import Details from '~/pages/Details';
 import Problem from '~/pages/Problem';
 import ViewProblem from '~/pages/ViewProblem';
+import Signature from '~/pages/Signature';
 
 const Stacks = createStackNavigator();
 
@@ -35,6 +37,14 @@ export default function StackNavigator() {
         }}
       />
       <Stacks.Screen
+        name="Delivered"
+        component={Delivered}
+        options={{
+          title: 'Encomendas finalizadas',
+          headerShown: false,
+        }}
+      />
+      <Stacks.Screen
         name="Details"
         component={Details}
         options={{
@@ -55,6 +65,14 @@ export default function StackNavigator() {
         component={ViewProblem}
         options={{
           title: 'Visualizar problemas',
+          headerShown: true,
+        }}
+      />
+      <Stacks.Screen
+        name="Signature"
+        component={Signature}
+        options={{
+          title: 'Confirmar entrega',
           headerShown: true,
         }}
       />

@@ -5,6 +5,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import StackNavigator from './stackNavigator';
 
 import Profile from '~/pages/Profile/index';
+import Delivered from '~/pages/Delivered/index';
 
 const Tabs = createBottomTabNavigator();
 
@@ -26,6 +27,7 @@ export default function TabNavigator() {
           ),
         }}
       />
+
       <Tabs.Screen
         name="Profile"
         component={Profile}
