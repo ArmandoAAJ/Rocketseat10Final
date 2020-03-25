@@ -17,6 +17,7 @@ export function* singIn({ payload }) {
       name: response.data.name,
       email: response.data.email,
       avatar: response.data.avatar,
+      date_register: response.data.createdAt,
     };
 
     yield put(signInSuccess(id, profile));
