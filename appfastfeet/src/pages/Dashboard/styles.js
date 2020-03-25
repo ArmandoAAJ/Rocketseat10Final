@@ -44,6 +44,7 @@ export const TextLinkP = styled.Text`
   font-size: 13px;
   color: 'rgb(170, 129, 239)';
   padding-right: 5px;
+  font-weight: bold;
   text-decoration: underline;
 `;
 

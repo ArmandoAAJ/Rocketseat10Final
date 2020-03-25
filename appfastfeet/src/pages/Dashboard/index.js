@@ -108,7 +108,9 @@ export default function Dashboard({ navigation }) {
             <TextEntregas>Entregas</TextEntregas>
             <NavLink>
               <TextLinkP>Pendentes</TextLinkP>
-              <TextLinkE>Entregues</TextLinkE>
+              <TextLinkE onPress={() => navigation.navigate('Delivered')}>
+                Entregues
+              </TextLinkE>
             </NavLink>
           </Content>
           {loading ? (
@@ -135,7 +137,7 @@ export default function Dashboard({ navigation }) {
                     <DotHolder>
                       <Dot done />
                       <Line />
-                      <Dot done={order.status} />
+                      <Dot done={order.start_date} />
                       <Line />
                       <Dot done={!!order.end_date} />
                     </DotHolder>
