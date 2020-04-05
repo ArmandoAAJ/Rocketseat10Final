@@ -105,3 +105,33 @@ export const ContentTable = styled.div`
     margin-left: 40%;
   }
 `;
+
+export const Pagination = styled.div`
+  display: flex;
+  margin-left: 80%;
+  span {
+    height: 30px;
+    padding: 0 15px;
+    border-radius: 4px;
+    border: 1px solid #eee;
+    background: #7d40e7;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  button {
+    height: 30px;
+    width: 30px;
+    border-radius: 4px;
+    border: 1px solid #eee;
+    background: #7d40e7;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    &:disabled {
+      opacity: 0;
+    }
+  }
+`;

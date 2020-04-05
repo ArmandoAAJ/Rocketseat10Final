@@ -106,17 +106,6 @@ export const ContentTable = styled.div`
       background-color: rgba(34, 139, 34, 0.2);
     }
 
-    .pendente {
-      display: flex;
-      list-style-type: none;
-      font-size: 11px;
-      padding: 3px;
-      border-radius: 10px;
-      width: 90px;
-      color: Orange;
-      background-color: rgba(255, 215, 0, 0.2);
-    }
-
     .cancelado {
       display: flex;
       list-style-type: none;
@@ -147,5 +136,35 @@ export const ContentTable = styled.div`
     background-color: red;
     color: #fff;
     margin-left: 40%;
+  }
+`;
+
+export const Pagination = styled.div`
+  display: flex;
+  margin-left: 80%;
+  span {
+    height: 30px;
+    padding: 0 15px;
+    border-radius: 4px;
+    border: 1px solid #eee;
+    background: #7d40e7;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  button {
+    height: 30px;
+    width: 30px;
+    border-radius: 4px;
+    border: 1px solid #eee;
+    background: #7d40e7;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    &:disabled {
+      opacity: 0;
+    }
   }
 `;
