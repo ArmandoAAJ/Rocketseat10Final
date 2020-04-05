@@ -28,10 +28,6 @@ Este aplicativo apresenta todas as mais recentes ferramentas e práticas em dese
 - 🌸 **Reactotron** - Ajuda no processo de depuração
 - 💖 **Lint** — ESlint/Prettier/Editor - Config Ferramentas para organização e padronização de códigos
 
-## Images
-
-
-
 
 ## Getting started
 
