@@ -18,8 +18,6 @@ import OrderController from './app/controllers/OrderController';
 
 import ListOrderController from './app/controllers/ListOrder';
 
-import OrderStartController from './app/controllers/OrderStartController';
-
 import OrderEndController from './app/controllers/OrderEndController';
 
 import ProblemController from './app/controllers/ProblemController';
@@ -65,9 +63,6 @@ routes.delete('/orders/:id', authMiddleware, OrderController.delete);
 // List Orders Deliverman
 routes.get('/orders/:id/list', ListOrderController.index);
 routes.get('/orders/:id/delivered', ListOrderController.show);
-
-// Order Start Deliveryman
-routes.put('/orders/:id/start', OrderStartController.update);
 
 // Order End Deliveryman
 routes.put('/orders/:id/end', OrderEndController.update);

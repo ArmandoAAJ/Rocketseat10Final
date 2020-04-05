@@ -50,14 +50,25 @@ class OrderProblemControler {
       return res.status(401).json({ ERRO: 'Já encontra-se cancelada' });
     }
 
+    if (orders.end_date) {
+      return res
+        .status(401)
+        .json({ ERRO: 'Encomendas entregues não podem ser canceladas' });
+    }
+
     orders.canceled_at = new Date();
     await orders.save();
 
-    return res.json(orders);
+    return res.json(problem);
   }
 
   async index(req, res) {
-    const problem = await Problem.findAll();
+    const { page = 1 } = req.query;
+    const problem = await Problem.findAndCountAll({
+      order: ['id'],
+      limit: 5,
+      offset: (page - 1) * 5,
+    });
 
     if (!problem) {
       return res.status(401).json({ ERRO: 'Não nenhum problema cadastrado!' });

@@ -18,13 +18,16 @@ class SessionController {
     if (!(await schema.isValid(req.body))) {
       return res.status(400).json({ ERRO: 'Verifique os dados.' });
     }
-    const { name, rua, numero, complemento, estado, cidade, cep } = req.body;
+    const { name, rua, numero, estado, complemento, cidade, cep } = req.body;
+
+    const estadoUpper = estado.toUpperCase();
+
     const recipient = await Recipient.create({
       name,
       rua,
       numero,
       complemento,
-      estado,
+      estado: estadoUpper,
       cidade,
       cep,
       active: true,
@@ -50,13 +53,26 @@ class SessionController {
 
     const { id } = req.params;
 
+    const { name, rua, numero, estado, complemento, cidade, cep } = req.body;
+
+    const estadoUpper = estado.toUpperCase();
+
     const recipient = await Recipient.findByPk(id);
 
     if (!recipient) {
       return res.status(401).json({ ERRO: 'Receptor não encontrado.' });
     }
 
-    await recipient.update(req.body);
+    await recipient.update({
+      name,
+      rua,
+      numero,
+      complemento,
+      estado: estadoUpper,
+      cidade,
+      cep,
+      active: true,
+    });
 
     return res.json(recipient);
   }
@@ -65,15 +81,17 @@ class SessionController {
     const { q, page = 1 } = req.query;
 
     const recipient = q
-      ? await Recipient.findAll({
+      ? await Recipient.findAndCountAll({
           where: { name: { [Op.iLike]: `%${q}%` }, active: true },
-          order: ['name'],
-          offset: (page - 1) * 10,
+          order: ['id'],
+          limit: 5,
+          offset: (page - 1) * 5,
         })
-      : await Recipient.findAll({
+      : await Recipient.findAndCountAll({
           where: { active: true },
-          order: ['name'],
-          offset: (page - 1) * 10,
+          order: ['id'],
+          limit: 5,
+          offset: (page - 1) * 5,
         });
 
     if (recipient.length <= 0) {

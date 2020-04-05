@@ -10,7 +10,9 @@ module.exports = {
       order_id: {
         type: Sequelize.INTEGER,
         references: { model: 'orders', key: 'id' },
-        allowNull: false,
+        onUpdate: 'CASCADE',
+        onDelete: 'SET NULL',
+        allowNull: true,
       },
       description: {
         type: Sequelize.STRING,

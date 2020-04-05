@@ -90,7 +90,7 @@ class DeliverymanController {
     const { q, page = 1 } = req.query;
 
     const deliveryman = q
-      ? await Deliveryman.findAll({
+      ? await Deliveryman.findAndCountAll({
           where: { name: { [Op.iLike]: `%${q}%` }, active: true },
           order: ['id'],
           include: [
@@ -103,7 +103,7 @@ class DeliverymanController {
           limit: 10,
           offset: (page - 1) * 10,
         })
-      : await Deliveryman.findAll({
+      : await Deliveryman.findAndCountAll({
           where: { active: true },
           order: ['id'],
           include: [
@@ -117,7 +117,7 @@ class DeliverymanController {
           offset: (page - 1) * 10,
         });
 
-    if (deliveryman.length <= 0) {
+    if (deliveryman.length < 1) {
       return res.json({ ERRO: 'Não há Entregadores cadastrado!' });
     }
 

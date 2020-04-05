@@ -1,10 +1,10 @@
 // Cadastro dados da entrega/cliente/entregador/produto
 import * as Yup from 'yup';
 import { Op } from 'sequelize';
-import { isAfter } from 'date-fns';
 import Order from '../models/Order';
 import Deliveryman from '../models/Deliveryman';
 import Recipient from '../models/Recipient';
+import File from '../models/File';
 
 class OrderController {
   async store(req, res) {
@@ -79,19 +79,6 @@ class OrderController {
       });
     }
 
-    if (order.start_date !== null) {
-      const deliverymanRetired = isAfter(
-        new Date(),
-        new Date(order.start_date)
-      );
-
-      if (deliverymanRetired && order.deliveryman_id !== deliveryman_id) {
-        return res.status(401).json({
-          ERRO: 'Você não pode alterar o Entregado de uma encomenda retirada',
-        });
-      }
-    }
-
     const deliveriman = await Deliveryman.findByPk(deliveryman_id);
     if (!deliveriman) {
       return res.status(401).json({ ERRO: 'Entregador não encontrado.' });
@@ -111,7 +98,7 @@ class OrderController {
     const { q, page = 1 } = req.query;
 
     const orders = q
-      ? await Order.findAll({
+      ? await Order.findAndCountAll({
           where: { product: { [Op.iLike]: `%${q}%` } },
           order: ['id'],
           include: [
@@ -125,11 +112,15 @@ class OrderController {
               as: 'recipient',
               attributes: ['id', 'name', 'cidade', 'estado'],
             },
+            {
+              model: File,
+              as: 'signature',
+            },
           ],
-          limit: 10,
-          offset: (page - 1) * 10,
+          limit: 5,
+          offset: (page - 1) * 5,
         })
-      : await Order.findAll({
+      : await Order.findAndCountAll({
           order: ['id'],
           include: [
             {
@@ -142,9 +133,13 @@ class OrderController {
               as: 'recipient',
               attributes: ['id', 'name', 'cidade', 'estado', 'rua', 'cep'],
             },
+            {
+              model: File,
+              as: 'signature',
+            },
           ],
-          limit: 10,
-          offset: (page - 1) * 10,
+          limit: 5,
+          offset: (page - 1) * 5,
         });
 
     if (orders.length < 1) {
@@ -161,6 +156,12 @@ class OrderController {
 
     if (!order) {
       return res.status(401).json({ ERRO: 'Entrega não encontrada' });
+    }
+
+    if (order.end_date) {
+      return res
+        .status(401)
+        .json({ ERRO: 'Entregas concluídas não podem ser excluídas' });
     }
 
     await order.destroy();
