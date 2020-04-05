@@ -1,9 +1,8 @@
 <h1 align="center">
 <br>
-  <img src="src/assets/logo.png" alt="Fastfeet" width="200">
+  <img src="src/assets/logo.png" alt="Fastfeet" width="300">
 <br>
 <br>
-Fastfett
 </h1>
 
 <p align="center">Aplicação desenvolvida para gerenciamento e cadastro de entregadores de uma transportadora</p>
