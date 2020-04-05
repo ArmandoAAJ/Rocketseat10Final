@@ -20,26 +20,22 @@
 
 ## Features
 
-This app features all the latest tools and practices in web development!
+Este aplicativo apresenta todas as mais recentes ferramentas e práticas em desenvolvimento web!
 
-- ⚛ **React** — A library to build user interfaces
-- ♻ **Redux with Redux Saga** — State management with middleware
-- 💅 **CSS** — styled-components
-- 🌸 **Reactotron** - Helps debugging process
-- 💖 **Lint** — ESlint/Prettier/Editor Config
+- ⚛ **React** — Uma biblioteca para construir interfaces de usuário
+- ♻ **Redux with Redux Saga** — Gerenciamento de estado com middleware
+- 💅 **CSS** — Componentes estilizados
+- 🌸 **Reactotron** - Ajuda no processo de depuração
+- 💖 **Lint** — ESlint/Prettier/Editor - Config Ferramentas para organização e padronização de códigos
 
 ## Getting started
 
-_Before you run this application you need to make sure the [server](https://github.com/jpedroschmitz/gobarber-api) is running!_.
+_ Antes de executar este aplicativo, verifique se o [servidor] (https://github.com/ArmandoAAJ/FastFeet/tree/master/api-node) está em execução!
 
-1. Clone this repo using `https://github.com/jpedroschmitz/gobarber.git`
-2. Move to the appropriate directory: `cd gobarber`.<br />
-3. Run `yarn` to install dependencies.<br />
-4. Run `yarn start` to see the example app at `http://localhost:3000`.
+1. Clone este repositório
+2. Execute `yarn` para instalar as dependências.<br />
+3. Execute `yarn start` para ver o aplicativo exemplo `http://localhost:3000`.
 
-## Contributing
-
-Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests.
 
 ## License
 
