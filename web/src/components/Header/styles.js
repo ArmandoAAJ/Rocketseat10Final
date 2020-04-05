@@ -6,7 +6,6 @@ export const Container = styled.div`
 `;
 
 export const Content = styled.div`
-  min-width: 600px;
   height: 64px;
   display: flex;
   justify-content: space-between;
@@ -49,6 +48,9 @@ export const Content = styled.div`
       a {
         font-size: 13px;
       }
+    }
+    aside {
+      display: none;
     }
   }
 `;
