@@ -24,21 +24,33 @@ export default function New() {
       const responseDeliveryman = await api.get('deliverymans');
       const responseRecipients = await api.get('recipients');
 
+      if (responseRecipients.data.count === 0) {
+        toast.error('Cadastre um Receptor!');
+        history.push('dashboard');
+        return;
+      }
+
+      if (responseDeliveryman.data.count === 0) {
+        toast.error('Cadastre um Entregador!');
+        history.push('dashboard');
+        return;
+      }
+
       try {
-        const dataDeliveryman = responseDeliveryman.data.map(d => ({
+        const dataDeliveryman = responseDeliveryman.data.rows.map(d => ({
           value: d.id,
           label: d.name,
         }));
 
-        const dataRecipient = responseRecipients.data.map(r => ({
+        const dataRecipient = responseRecipients.data.rows.map(r => ({
           value: r.id,
           label: r.name,
         }));
+
         setRecipients(dataRecipient);
         setDeliverymans(dataDeliveryman);
       } catch (err) {
-        toast.warning(responseRecipients.data.ERRO);
-        toast.warning(responseDeliveryman.data.ERRO);
+        toast.error('Não conseguimos acessar a página solicitada');
       }
     }
     loadSelect();

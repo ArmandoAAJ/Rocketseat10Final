@@ -33,12 +33,12 @@ export default function Edit({ location, match }) {
       const responseR = await api.get('recipients');
 
       try {
-        const data = response.data.map(d => ({
+        const data = response.data.rows.map(d => ({
           label: d.name,
           value: d.id,
         }));
 
-        const dataR = responseR.data.map(r => ({
+        const dataR = responseR.data.rows.map(r => ({
           label: r.name,
           value: r.id,
         }));

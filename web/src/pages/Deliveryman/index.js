@@ -4,7 +4,13 @@
 /* eslint-disable react/jsx-no-undef */
 import React, { useEffect, useState } from 'react';
 
-import { MdAdd, MdDelete, MdModeEdit } from 'react-icons/md';
+import {
+  MdAdd,
+  MdDelete,
+  MdModeEdit,
+  MdKeyboardArrowLeft,
+  MdKeyboardArrowRight,
+} from 'react-icons/md';
 import Avatar from 'react-avatar';
 import { Link } from 'react-router-dom';
 import { Form, Input } from '@rocketseat/unform';
@@ -13,10 +19,12 @@ import { confirmAlert } from 'react-confirm-alert';
 import { toast } from 'react-toastify';
 import api from '~/services/api';
 import history from '~/services/history';
-import { Container, Content, ContentTable } from './styles';
+import { Container, Content, ContentTable, Pagination } from './styles';
 import Header from '~/components/Header';
 
 export default function New({ location }) {
+  const [page, setPage] = useState(1);
+  const [totalRows, setTotalRows] = useState(0);
   const [deliverymans, setDeliverymans] = useState([]);
 
   const { q } = queryString.parse(location.search);
@@ -24,22 +32,38 @@ export default function New({ location }) {
   useEffect(() => {
     async function loadData() {
       const response = await api.get('deliverymans', {
-        params: { q },
+        params: { q, page },
       });
 
       try {
-        const data = response.data.map(r => ({
+        const data = response.data.rows.map(r => ({
           ...r,
           url: r.avatar_id ? r.avatar.url : null,
         }));
 
+        const total = response.data.count / 5;
+
+        if (total % 1 === 0) {
+          setTotalRows(total);
+        } else {
+          const x = Math.trunc(total);
+          setTotalRows(x + 1);
+        }
+
         setDeliverymans(data);
       } catch (error) {
+        const totals = Math.round(response.data.count / 5);
+        if (totals % 1 === 0) {
+          setTotalRows(totals);
+        } else {
+          const x = Math.trunc(totals);
+          setTotalRows(x + 1);
+        }
         setDeliverymans(response.data);
       }
     }
     loadData();
-  }, [q]);
+  }, [q, page]);
 
   function handleSubmit(data) {
     history.push(`entregador?q=${data.q}`);
@@ -70,6 +94,10 @@ export default function New({ location }) {
         },
       ],
     });
+  }
+
+  function handlePage(action) {
+    setPage(action === 'back' ? page - 1 : page + 1);
   }
 
   return (
@@ -154,6 +182,27 @@ export default function New({ location }) {
             <h3>não há nada por aqui :/</h3>
           )}
         </ContentTable>
+        {deliverymans.length > 0 ? (
+          <Pagination>
+            <button
+              type="button"
+              disabled={page < 2}
+              onClick={() => handlePage('back')}
+            >
+              <MdKeyboardArrowLeft size={30} />
+            </button>
+            <span>Página {page}</span>
+            <button
+              type="button"
+              onClick={() => handlePage('next')}
+              disabled={page === totalRows}
+            >
+              <MdKeyboardArrowRight size={30} />
+            </button>
+          </Pagination>
+        ) : (
+          ''
+        )}
       </Content>
     </Container>
   );

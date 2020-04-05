@@ -6,24 +6,51 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Modal from 'react-awesome-modal';
 
-import { MdCancel, MdRemoveRedEye } from 'react-icons/md';
+import {
+  MdCancel,
+  MdRemoveRedEye,
+  MdKeyboardArrowLeft,
+  MdKeyboardArrowRight,
+} from 'react-icons/md';
 import { toast } from 'react-toastify';
 import { confirmAlert } from 'react-confirm-alert';
+
 import history from '~/services/history';
-import { Container, Content, ContentTable } from './styles';
+import { Container, Content, ContentTable, Pagination } from './styles';
 import Header from '~/components/Header';
 import api from '~/services/api';
 
 export default function Dashboard() {
+  const [page, setPage] = useState(1);
+  const [totalRows, setTotalRows] = useState(0);
   const [problems, setProblems] = useState([]);
   const [visible, setVisible] = useState(false);
   const [description, SetDescription] = useState();
 
   useEffect(() => {
     async function loadData() {
-      const response = await api.get('problems');
-
-      setProblems(response.data);
+      const response = await api.get('problems', {
+        params: { page },
+      });
+      try {
+        const total = response.data.count / 5;
+        if (total % 1 === 0) {
+          setTotalRows(total);
+        } else {
+          const x = Math.trunc(total);
+          setTotalRows(x + 1);
+        }
+        setProblems(response.data.rows);
+      } catch (error) {
+        const total = response.data.count / 5;
+        if (total % 1 === 0) {
+          setTotalRows(total);
+        } else {
+          const x = Math.trunc(total);
+          setTotalRows(x + 1);
+        }
+        setProblems(response.data.rows);
+      }
     }
 
     loadData();
@@ -42,7 +69,7 @@ export default function Dashboard() {
     try {
       await api.delete(`problems/${id}`);
       toast.success('Encomenda cancelada com sucesso');
-      history.push(`dashboard`);
+      history.push(`problemas`);
     } catch (err) {
       toast.error(err.response.data.ERRO);
     }
@@ -63,6 +90,10 @@ export default function Dashboard() {
         },
       ],
     });
+  }
+
+  function handlePage(action) {
+    setPage(action === 'back' ? page - 1 : page + 1);
   }
 
   return (
@@ -127,6 +158,27 @@ export default function Dashboard() {
             <h3>não há nada por aqui :/</h3>
           )}
         </ContentTable>
+        {problems.length > 0 ? (
+          <Pagination>
+            <button
+              type="button"
+              disabled={page < 2}
+              onClick={() => handlePage('back')}
+            >
+              <MdKeyboardArrowLeft size={30} />
+            </button>
+            <span>Página {page}</span>
+            <button
+              type="button"
+              onClick={() => handlePage('next')}
+              disabled={page === totalRows}
+            >
+              <MdKeyboardArrowRight size={30} />
+            </button>
+          </Pagination>
+        ) : (
+          ''
+        )}
       </Content>
     </Container>
   );

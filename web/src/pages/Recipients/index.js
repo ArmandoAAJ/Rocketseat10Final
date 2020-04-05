@@ -7,25 +7,52 @@ import { Link } from 'react-router-dom';
 
 import queryString from 'query-string';
 import { Form, Input } from '@rocketseat/unform';
-import { MdAdd, MdDelete, MdModeEdit } from 'react-icons/md';
+import {
+  MdAdd,
+  MdDelete,
+  MdModeEdit,
+  MdKeyboardArrowLeft,
+  MdKeyboardArrowRight,
+} from 'react-icons/md';
 import { confirmAlert } from 'react-confirm-alert';
 import { toast } from 'react-toastify';
 import api from '~/services/api';
 import history from '~/services/history';
-import { Container, Content, ContentTable } from './styles';
+import { Container, Content, ContentTable, Pagination } from './styles';
 import Header from '~/components/Header';
 
 export default function Recipients({ location }) {
+  const [page, setPage] = useState(1);
+  const [totalRows, setTotalRows] = useState(0);
   const [recipients, setRecipients] = useState([]);
   const { q } = queryString.parse(location.search);
 
   useEffect(() => {
     async function loadRecipient() {
       const response = await api.get('recipients', {
-        params: { q },
+        params: { q, page },
       });
 
-      setRecipients(response.data);
+      try {
+        const total = response.data.count / 5;
+
+        if (total % 1 === 0) {
+          setTotalRows(total);
+        } else {
+          const x = Math.trunc(total);
+          setTotalRows(x + 1);
+        }
+        setRecipients(response.data.rows);
+      } catch (error) {
+        setRecipients(response.data.rows);
+        const totals = Math.round(response.data.count / 5);
+        if (totals % 1 === 0) {
+          setTotalRows(totals);
+        } else {
+          const x = Math.trunc(totals);
+          setTotalRows(x + 1);
+        }
+      }
     }
     loadRecipient();
   }, [q]);
@@ -59,6 +86,10 @@ export default function Recipients({ location }) {
         },
       ],
     });
+  }
+
+  function handlePage(action) {
+    setPage(action === 'back' ? page - 1 : page + 1);
   }
 
   return (
@@ -134,6 +165,27 @@ export default function Recipients({ location }) {
             <h3>não há nada por aqui :/</h3>
           )}
         </ContentTable>
+        {recipients.length > 0 ? (
+          <Pagination>
+            <button
+              type="button"
+              disabled={page < 2}
+              onClick={() => handlePage('back')}
+            >
+              <MdKeyboardArrowLeft size={30} />
+            </button>
+            <span>Página {page}</span>
+            <button
+              type="button"
+              onClick={() => handlePage('next')}
+              disabled={page === totalRows}
+            >
+              <MdKeyboardArrowRight size={30} />
+            </button>
+          </Pagination>
+        ) : (
+          ''
+        )}
       </Content>
     </Container>
   );

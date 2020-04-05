@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-expressions */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable react/prop-types */
 /* eslint-disable no-nested-ternary */
@@ -13,34 +14,47 @@ import {
   MdDelete,
   MdModeEdit,
   MdRemoveRedEye,
+  MdKeyboardArrowLeft,
+  MdKeyboardArrowRight,
 } from 'react-icons/md';
 import queryString from 'query-string';
-import { format, isAfter } from 'date-fns';
+import { format, parseISO } from 'date-fns';
+import { pt } from 'date-fns/locale';
 import Avatar from 'react-avatar';
 import { toast } from 'react-toastify';
 import { confirmAlert } from 'react-confirm-alert';
 import history from '~/services/history';
-import { Container, Content, ContentTable } from './styles';
+import { Container, Content, ContentTable, Pagination } from './styles';
 import Header from '~/components/Header';
 import api from '~/services/api';
 
 export default function Dashboard({ location }) {
+  const [page, setPage] = useState(1);
+  const [totalRows, setTotalRows] = useState(0);
   const [orders, setOrders] = useState([]);
   const [visible, setVisible] = useState(false);
   const [recipient, setRecipient] = useState([]);
   const [startDate, setStartDate] = useState();
   const [endDate, setEndDate] = useState();
-
+  const [signature, setSignature] = useState([]);
   const { q } = queryString.parse(location.search);
 
   useEffect(() => {
     async function loadData() {
       const response = await api.get('orders', {
-        params: { q },
+        params: { q, page },
       });
+      const total = response.data.count / 5;
+
+      if (total % 1 === 0) {
+        setTotalRows(total);
+      } else {
+        const x = Math.trunc(total);
+        setTotalRows(x + 1);
+      }
 
       try {
-        const data = response.data.map(o => ({
+        const data = response.data.rows.map(o => ({
           ...o,
           optionsDelivery: {
             value: o.deliveryman.id,
@@ -50,29 +64,46 @@ export default function Dashboard({ location }) {
             value: o.recipient.id,
             label: o.recipient.name,
           },
-          start: format(new Date(o.start_date), 'dd/MM/yyyy'),
-          end: format(new Date(o.end_date), 'dd/MM/yyyy'),
-          status: isAfter(new Date(), new Date(o.start_date)),
         }));
 
         setOrders(data);
       } catch (err) {
-        setOrders(response.data);
+        setOrders(response.data.rows);
+        const totals = Math.round(response.data.count / 5);
+        if (totals % 1 === 0) {
+          setTotalRows(totals);
+        } else {
+          const x = Math.trunc(totals);
+          setTotalRows(x + 1);
+        }
       }
     }
 
     loadData();
-  }, [q]);
+  }, [q, page]);
 
   function handleSubmit(data) {
     history.push(`dashboard?q=${data.q}`);
   }
 
   function openModal(order) {
-    setStartDate(order.start);
-    setEndDate(order.end);
+    const end = order.end_date
+      ? format(parseISO(order.end_date), 'dd/MM/yyyy', {
+          locale: pt,
+        })
+      : '--/--/--';
+
+    const start = order.createdAt
+      ? format(parseISO(order.createdAt), 'dd/MM/yyyy', {
+          locale: pt,
+        })
+      : '--/--/--';
+
+    setStartDate(start);
+    setEndDate(end);
     setRecipient(order.recipient);
     setVisible(true);
+    setSignature(order.signature);
   }
 
   function closeModal() {
@@ -106,13 +137,16 @@ export default function Dashboard({ location }) {
     });
   }
 
+  function handlePage(action) {
+    setPage(action === 'back' ? page - 1 : page + 1);
+  }
   return (
     <Container>
-      {/* Falta fazer a parte da img que está vindo fixa  */}
       <Modal
         visible={visible}
         width="400"
-        height="350"
+        min-height="350"
+        max-height="auto"
         effect="fadeInDown"
         onClickAway={() => closeModal()}
       >
@@ -126,14 +160,18 @@ export default function Dashboard({ location }) {
           <h4>Datas</h4>
           <p>
             Retirada:
-            {startDate === '31/12/1969' ? '' : startDate}
+            {startDate}
           </p>
           <p>
             Entrega:
-            {endDate === '31/12/1969' ? '' : endDate}
+            {endDate}
           </p>
           <h4>Assinatura do destinatário</h4>
-          <img alt="assinatura" src="" />
+          {signature ? (
+            <img src={signature.url} alt="assinatura" height="350" />
+          ) : (
+            <img src="" alt="" />
+          )}
         </div>
       </Modal>
 
@@ -153,6 +191,7 @@ export default function Dashboard({ location }) {
             </button>
           </Link>
         </div>
+
         <ContentTable>
           {orders.length > 0 ? (
             <table>
@@ -197,15 +236,10 @@ export default function Dashboard({ location }) {
                           <MdFiberManualRecord />
                           ENTREGUE
                         </li>
-                      ) : order.start_date && order.status ? (
+                      ) : (
                         <li className="retirado">
                           <MdFiberManualRecord />
-                          RETIRADA
-                        </li>
-                      ) : (
-                        <li className="pendente">
-                          <MdFiberManualRecord />
-                          PENDENTE
+                          RETIRADO
                         </li>
                       )}
                     </td>
@@ -244,6 +278,27 @@ export default function Dashboard({ location }) {
             <h3>não há nada por aqui :/</h3>
           )}
         </ContentTable>
+        {orders.length > 0 ? (
+          <Pagination>
+            <button
+              type="button"
+              disabled={page < 2}
+              onClick={() => handlePage('back')}
+            >
+              <MdKeyboardArrowLeft size={30} />
+            </button>
+            <span>Página {page}</span>
+            <button
+              type="button"
+              onClick={() => handlePage('next')}
+              disabled={page === totalRows}
+            >
+              <MdKeyboardArrowRight size={30} />
+            </button>
+          </Pagination>
+        ) : (
+          ''
+        )}
       </Content>
     </Container>
   );

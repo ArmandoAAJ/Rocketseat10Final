@@ -65,11 +65,11 @@ export default function New() {
           </nav>
           <StudentsContent>
             <label> Nome</label>
-            <Input name="name" required />
+            <Input type="text" name="name" required />
             <div>
               <label className="street">
                 Rua
-                <Input name="rua" required />
+                <Input type="text" name="rua" required />
               </label>
               <label>
                 Número
@@ -77,21 +77,27 @@ export default function New() {
               </label>
               <label>
                 Complemento
-                <Input name="complemento" />
+                <Input type="text" name="complemento" />
               </label>
             </div>
             <div>
               <label>
                 Cidade
-                <Input name="cidade" required />
+                <Input type="text" name="cidade" required />
               </label>
               <label>
                 Estado
-                <Input name="estado" required />
+                <Input
+                  type="text"
+                  name="estado"
+                  maxLength="2"
+                  pattern="[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+$"
+                  required
+                />
               </label>
               <label>
                 Cep
-                <Input name="cep" required />
+                <Input name="cep" maxLength="8" pattern="[0-9]+$" required />
               </label>
             </div>
           </StudentsContent>
