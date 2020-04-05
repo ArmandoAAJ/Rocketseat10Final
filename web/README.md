@@ -1,6 +1,6 @@
 <h1 align="center">
 <br>
-  <img src="src/assets/images/logo.png" alt="GoBarber" width="90">
+  <img src="src/assets/logo.png" alt="GoBarber" width="90">
 <br>
 <br>
 Fastfett
