@@ -1,6 +1,6 @@
 <h1 align="center">
 <br>
-  <img src="src/assets/logo.png" alt="Fastfeet" width="300">
+  <img src="https://raw.githubusercontent.com/Rocketseat/bootcamp-gostack-desafio-09/master/.github/logo.png" alt="Fastfeet" width="300">
 <br>
 <br>
 </h1>
