@@ -110,7 +110,7 @@ export default function Dashboard({ navigation }) {
               <TextLinkP onPress={() => navigation.navigate('Dashboard')}>
                 Pendentes
               </TextLinkP>
-              <TextLinkE>Entregues</TextLinkE>
+              <TextLinkE>Entregues-{orders.length}</TextLinkE>
             </NavLink>
           </Content>
           {loading ? (
@@ -137,7 +137,7 @@ export default function Dashboard({ navigation }) {
                     <DotHolder>
                       <Dot done />
                       <Line />
-                      <Dot done={order.start_date} />
+                      <Dot done={order.createdAt} />
                       <Line />
                       <Dot done={!!order.end_date} />
                     </DotHolder>
@@ -148,8 +148,8 @@ export default function Dashboard({ navigation }) {
                   <Date>
                     <TextDate>Data</TextDate>
                     <TextDateNumber>
-                      {order.start_date
-                        ? format(parseISO(order.start_date), 'dd/MM/yyyy', {
+                      {order.createdAt
+                        ? format(parseISO(order.createdAt), 'dd/MM/yyyy', {
                             locale: pt,
                           })
                         : '--/--/--'}

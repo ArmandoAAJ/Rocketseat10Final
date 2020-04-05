@@ -33,6 +33,7 @@ export default function Problem({ route, navigation }) {
               placeholder="Inclua aqui o problema que ocorreu na entrega"
               keyboardType="default"
               multiline
+              required
               onChangeText={setProblem}
             />
           </Box>

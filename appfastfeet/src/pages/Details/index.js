@@ -45,8 +45,8 @@ export default function Details({ route, navigation }) {
   );
 
   const start_date = useMemo(() =>
-    order.start_date
-      ? format(parseISO(order.start_date), 'dd/MM/yyyy', {
+    order.createdAt
+      ? format(parseISO(order.createdAt), 'dd/MM/yyyy', {
           locale: pt,
         })
       : '--/--/--'
@@ -101,22 +101,34 @@ export default function Details({ route, navigation }) {
               </BoxDataE>
             </BoxInfoSituation>
           </BoxSituation>
-          <BoxButtom>
-            <Problem onPress={() => navigation.navigate('Problem', { order })}>
-              <Icon name="cancel" size={25} color="rgb(231, 64, 64)" />
-              <TextProblem>Informar Problema</TextProblem>
-            </Problem>
-            <ViewProblem
-              onPress={() => navigation.navigate('ViewProblem', { order })}
-            >
-              <Icon name="error-outline" size={25} color="rgb(233, 194, 87)" />
-              <TextProblem>Visualizar Problemas</TextProblem>
-            </ViewProblem>
-            <Confirm>
-              <Icon name="check-circle" size={25} color="rgb(125, 64, 231)" />
-              <TextProblem>Confirmar Entregas</TextProblem>
-            </Confirm>
-          </BoxButtom>
+          {!order.end_date ? (
+            <BoxButtom>
+              <Problem
+                onPress={() => navigation.navigate('Problem', { order })}
+              >
+                <Icon name="cancel" size={25} color="rgb(231, 64, 64)" />
+                <TextProblem>Informar Problema</TextProblem>
+              </Problem>
+              <ViewProblem
+                onPress={() => navigation.navigate('ViewProblem', { order })}
+              >
+                <Icon
+                  name="error-outline"
+                  size={25}
+                  color="rgb(233, 194, 87)"
+                />
+                <TextProblem>Visualizar Problemas</TextProblem>
+              </ViewProblem>
+              <Confirm
+                onPress={() => navigation.navigate('Signature', { order })}
+              >
+                <Icon name="check-circle" size={25} color="rgb(125, 64, 231)" />
+                <TextProblem>Confirmar Entregas</TextProblem>
+              </Confirm>
+            </BoxButtom>
+          ) : (
+            <BoxButtom />
+          )}
         </Header>
       </Container>
     </>

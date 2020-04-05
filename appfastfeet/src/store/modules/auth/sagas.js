@@ -11,7 +11,6 @@ export function* singIn({ payload }) {
     const { id } = payload;
 
     const response = yield call(api.get, `deliverymans/${id}`);
-
     const profile = {
       id: response.data.id,
       name: response.data.name,
@@ -22,10 +21,7 @@ export function* singIn({ payload }) {
 
     yield put(signInSuccess(id, profile));
   } catch (err) {
-    Alert.alert(
-      'Falha na autenticação',
-      'Houve um erro no login, verifique seus dados'
-    );
+    Alert.alert('Falha na autenticação', `Erro na autenticação`);
     yield put(signFailure());
   }
 }

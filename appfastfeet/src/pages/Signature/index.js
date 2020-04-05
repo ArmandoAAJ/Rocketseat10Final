@@ -139,30 +139,22 @@ export default function Signature({ route, navigation }) {
           )}
         </Box>
         <BoxPhoto>
-          {order.end_date ? (
-            <Text />
-          ) : (
-            <StartPhoto
-              onPress={() => {
-                setIsCameraVisible(true);
-              }}
-            >
-              <Icon name="photo-camera" size={40} color="#ddd" />
-            </StartPhoto>
-          )}
+          <StartPhoto
+            onPress={() => {
+              setIsCameraVisible(true);
+            }}
+          >
+            <Icon name="photo-camera" size={40} color="#ddd" />
+          </StartPhoto>
         </BoxPhoto>
         <Camera
           isVisible={isCameraVisible}
           onChangePhoto={onChangePhoto}
           onCloseCamera={onCloseCamera}
         />
-        {order.end_date ? (
-          <Text />
-        ) : (
-          <Button onPress={handleSubmit}>
-            <Text>Enviar</Text>
-          </Button>
-        )}
+        <Button onPress={handleSubmit}>
+          <Text>Enviar</Text>
+        </Button>
       </Container>
     </>
   );
