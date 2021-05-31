@@ -35,7 +35,7 @@ A aplicação desenvolvida neste projeto é um app gerenciador de entregas, o Fa
 
 A aplicação Web por sua vez é voltada para a gerência da transportadora, onde funcionalidades, como: CRUDs de encomendas, gerencimaneto dos entregadores e encomendas.
 
-Já aplicação mobile é direcionada aos clientes da transportadora, onde os mesmo poderão ver as encomendas a serem entregues com os respectivos status, além de abrir chamados com reclamaões caso necessário e ao receber uma encomenda assinar digitalmente a entrega.
+Já aplicação mobile é direcionada aos clientes da transportadora, onde os mesmo poderão ver as encomendas a serem entregues com os respectivos status, além de abrir chamados com reclamações caso necessário e ao receber uma encomenda assinar digitalmente a entrega.
 
 ## 📥 Instalação e execução
 
